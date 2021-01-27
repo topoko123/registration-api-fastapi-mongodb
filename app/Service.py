@@ -29,3 +29,7 @@ class Service:
 
     def UserSignin(self, jsonout):
         return jsonout
+#=====================================================================================================#
+
+    def UpdateService(self, jsonout):
+        return jsonout

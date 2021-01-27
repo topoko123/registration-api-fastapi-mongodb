@@ -58,6 +58,20 @@ async def UserSignin(userModels: UserModel):
     return newController.UserSignin(data)
 #=====================================================================================================#
 
-# @router.patch("/service/myapi/update-service")
-# async def UpdateService(updateServiceModels: ServicePatchModel):
+@router.patch("/service/myapi/update-service")
+async def UpdateService(updateServiceModels: ServicePatchModel):
+
+    data = {
+        'service_name' :updateServiceModels.service_name,
+        'api_url'      : updateServiceModels.api_url,
+        'permission'   : updateServiceModels.permission,
+        'service_id'   :updateServiceModels.service_id,
+        'description'  : updateServiceModels.description,
+        'method'       : updateServiceModels.method,
+        'param_name'   : updateServiceModels.param_name,
+        'param_type'   : updateServiceModels.param_type,
+        'desc'         : updateServiceModels.desc,
+        'user_id'      : updateServiceModels.user_id
+    }
     
+    return newController.UpdateService(data)

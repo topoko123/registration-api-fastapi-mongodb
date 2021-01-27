@@ -37,3 +37,15 @@ class ServicePatchModel(BaseModel):
     param_type      : List[str] = []
     desc            : Optional[str] = None
     user_id         : str
+
+class SuperUserPatchModel(BaseModel):
+    service_id      : Optional[str] = None
+    service_name    : Optional[str] = None
+    api_url         : Optional[str] = None
+    permission      : Optional[str] = None
+    status          : Optional[str] = None
+    description     : Optional[str] = None
+    method          : Optional[str] = None
+    param_name      : List[str] = []
+    param_type      : List[str] = []
+    desc            : Optional[str] = None

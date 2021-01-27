@@ -174,5 +174,50 @@ class DB:
             msg = 'Error Login'
         jsonout = {'data': msg}
         return self.newService.UserSignin(jsonout)
+#=====================================================================================================#
+
+    def UpdateService(self, data, jsonout):
+        try:
+            for find in _services.find({'service_id': data['service_id'], 'user_id': data['user_id']}):
+                if (data['service_name'] and data['api_url'] and data['permission'] and 
+                    data['description'] and data['method'] and data['param_name'] and data['param_type'] and data['desc']) :
+
+                    _services.update_one({
+                        'service_id': data['service_id']
+                    },
+                    {
+                        '$set': {
+                            'service_name': data['service_name'],
+                            'api_url'     : data['api_url'],
+                            'permission'  : data['permission'],
+                            'description' : data['description'],
+                            'method'      : data['method'],
+                            'param_set.param_name': data['param_name'],
+                            'param_set.param_type': data['param_type'],
+                            'param_set.desc'      : data['desc']
+                        }
+                    })
+
+                    msg = {
+                        'message'     : 'Update Success',
+                        'service_name': data['service_name'],
+                        'api_url'     : data['api_url'],
+                        'permission'  : data['permission'],
+                        'description' : data['description'],
+                        'param_name'  : data['param_name'],
+                        'param_type'  : data['param_type'],
+                        'desc'        : data['desc']
+                    }
+                    break
+                else:
+                    msg = {'message': 'Update Failed'}
+            else:
+                msg = {'message': 'Not found'}
+        
+        except Exception as e:
+            print (e, (type, (e)))
+            msg = 'Error'
+        jsonout = {'data': msg}
+        return self.newService.UpdateService(jsonout)
 
 
