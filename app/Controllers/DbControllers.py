@@ -2,15 +2,36 @@ import os
 from Database.connection import DB
 from app.Service import Service
 
-class controller :
-    db = DB()
-    service = Service()
 
+class Controller :
+    db = DB()
+    newService = Service()
+    jsonout    = {}
+#=====================================================================================================#
 
     def main(self):
-        return self.service.get()
+        return self.newService.get()
+#=====================================================================================================#
 
-    def ListALl(self, page, limit):
-        jsonout = {}
-        return self.db.ListALl(page, limit, jsonout)
+    def ApiList(self, page, limit):
+        return self.db.ApiList(page, limit, self.jsonout)
+#=====================================================================================================#
 
+    def MyApiList(self, page, limit, user_id):
+        return self.db.MyApiList(page, limit, user_id, self.jsonout)
+#=====================================================================================================#
+
+    def SuperuserList(self, page, limit, status):
+        return self.db.SuperuserList(page, limit, status, self.jsonout)
+#=====================================================================================================#
+
+    def ServiceAdd(self, data):
+        return self.db.ServiceAdd(data, self.jsonout)
+#=====================================================================================================#
+
+    def UserSignin(self, data):
+        return self.db.UserSignin(data, self.jsonout)
+    
+
+
+        
