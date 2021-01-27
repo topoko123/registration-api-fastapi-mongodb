@@ -1,3 +1,5 @@
-from Database.Config.db_config import mongodb_url, port, MongoClient
-client = MongoClient(mongodb_url, port)
-db = client['api_url']
+from pymongo import MongoClient
+import Database.Config.db_config as settings
+
+client = MongoClient(settings.mongodb_url, settings.port)
+db = client['api_db']

@@ -1,18 +1,20 @@
 import os
-import Database.Config.conn as conn
+import Database.Config.conn as connec
 from pymongo import MongoClient
 from app.Service import Service
 
 sv = Service()
+
 class DB:
-    def ListALl(self, page, limit):
+
+    def ListALl(self, page, limit, jsonout):
+        
         total   = {}
         startat = (page - 1) * limit
-        try:
-            jsonout = {}
-            for find in conn.db.service.find({'permission': 'public'}, {'unix_time': 0}).skip(startat).limit(limit):
-                for search in conn.db.user.find({'user_id': find['user_id']}, {'unix_time': 0, 'gg.id_token': 0}):
-                
+        
+        try:        
+            for find in connec.db.service.find({'permission': 'public'}, {'unix_time': 0}).skip(startat).limit(limit):
+                for search in connec.db.user.find({'user_id': find['user_id']}, {'unix_time': 0, 'gg.id_token': 0}):
                     service_id = find['service_id']
                     dict = {
                         'service_id'  : service_id,
@@ -28,12 +30,8 @@ class DB:
                         'gmail'       : search['gg']['gmail'],
                         'datetime'    : find.get('datetime')
                     }
-                    
-
                     jsonout[service_id] = dict
-
-            total['total'] = conn.db.service.count({'permission': 'public'})
-
+            # sd = connec.db.user.count()
         except Exception as e:
             print (e, (type,(e)))
         

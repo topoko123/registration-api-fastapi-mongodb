@@ -11,6 +11,6 @@ class controller :
         return self.service.get()
 
     def ListALl(self, page, limit):
-        
-        return self.db.ListALl(page, limit)
+        jsonout = {}
+        return self.db.ListALl(page, limit, jsonout)
 
