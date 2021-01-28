@@ -1,9 +1,10 @@
 import requests
 from fastapi import Request, FastAPI, Depends, Body
+#=====================================================================================================#
 
 class Service:
     
-    def get(self):
+    def Index():
         try:
             result = {'result': 'OK'}
         except:
@@ -40,3 +41,8 @@ class Service:
 
     def DeleteService(self, jsonout):
         return jsonout
+#=====================================================================================================#
+
+    def SuperuserDelete(self, jsonout):
+        return jsonout
+#=====================================================================================================#

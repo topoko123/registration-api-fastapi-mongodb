@@ -2,6 +2,7 @@ from pydantic import BaseModel
 from typing import Optional, List
 import requests
 from fastapi import Request, FastAPI
+#=====================================================================================================#
 
 class ServiceModel(BaseModel):
     service_name : str
@@ -13,19 +14,20 @@ class ServiceModel(BaseModel):
     param_name   : List[str] = []
     param_type   : List[str] = []
     desc         : Optional[str] = None
+#=====================================================================================================#
 
 class UserModel(BaseModel):
     id_token    : str
     fullname    : str
     google_photo: str
     gmail       : str     
-
+#=====================================================================================================#
 
 class ServiceDeleteModel(BaseModel):
     service_id : str
     user_id    : str
+#=====================================================================================================#
     
-
 class ServicePatchModel(BaseModel):
     service_name    : Optional[str] = None
     api_url         : Optional[str] = None
@@ -37,6 +39,7 @@ class ServicePatchModel(BaseModel):
     param_type      : List[str] = []
     desc            : Optional[str] = None
     user_id         : str
+#=====================================================================================================#
 
 class SuperUserPatchModel(BaseModel):
     service_id      : Optional[str] = None
@@ -49,3 +52,4 @@ class SuperUserPatchModel(BaseModel):
     param_name      : List[str] = []
     param_type      : List[str] = []
     desc            : Optional[str] = None
+#=====================================================================================================#

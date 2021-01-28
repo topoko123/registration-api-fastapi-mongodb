@@ -5,8 +5,11 @@ from app.Service import Service
 from hashlib import sha256
 import time
 import datetime
+#=====================================================================================================#
+
 _services = connec.db.service
 _users = connec.db.user
+#=====================================================================================================#
 
 class DB:
 
@@ -277,3 +280,22 @@ class DB:
             msg = {'message': 'Error'}
         jsonout = {'data': msg}
         return self.newService.DeleteService(jsonout)
+#=====================================================================================================#
+
+    def SuperuserDelete(self, servcie_id, status, jsonout):
+        try:
+            if status == 'superuser':
+                for find in _services.find({'service_id': servcie_id}):
+                    _services.delete_one({'service_id': servcie_id})
+                    msg = {'message': 'Delete Success'}
+                    break
+                else:
+                    msg = {'message': 'Not Found'}
+            else:
+                msg = {'message': 'The status does not match the superuser'}
+        except Exception as e:
+            print(e,(type,(e)))
+            msg = {'message': 'Error'}
+        jsonout = {'data': msg}
+        return self.newService.SuperuserDelete(jsonout)
+#=====================================================================================================#

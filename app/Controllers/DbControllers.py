@@ -1,6 +1,7 @@
 import os
 from Database.connection import DB
 from app.Service import Service
+#=====================================================================================================#
 
 
 class Controller :
@@ -9,8 +10,8 @@ class Controller :
     jsonout    = {}
 #=====================================================================================================#
 
-    def main(self):
-        return self.newService.get()
+    def Index(self):
+        return self.newService.Index()
 #=====================================================================================================#
 
     def ApiList(self, page, limit):
@@ -43,6 +44,10 @@ class Controller :
 
     def DeleteService(self, data):
         return self.db.DeleteService(data, self.jsonout)
+#=====================================================================================================#
+
+    def SuperuserDelete(self, service_id, status):
+        return self.db.SuperuserDelete(service_id, status, self.jsonout)
 #=====================================================================================================#
 
 
