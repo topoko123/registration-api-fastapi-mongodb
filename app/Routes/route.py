@@ -2,7 +2,7 @@ import os
 from fastapi import APIRouter
 from starlette.requests import Request
 from app.Controllers.DbControllers import Controller
-from app.Models.bodymodels import ServiceModel, UserModel, ServiceDeleteModel, ServicePatchModel
+from app.Models.bodymodels import ServiceModel, UserModel, ServiceDeleteModel, ServicePatchModel, SuperUserPatchModel
 from app.Models.createmodels import createServer, createUser
 #=====================================================================================================#
 
@@ -30,7 +30,7 @@ async def SuperuserList(page: int, limit: int, status: str):
     return newController.SuperuserList(page, limit, status)
 #=====================================================================================================#
 
-@router.post("/service/add-service")
+@router.post("/service/myapi/add-service")
 async def ServiceAdd(serviceModels: ServiceModel):
     service_name = serviceModels.service_name
     api_url      = serviceModels.api_url.lower()
@@ -62,10 +62,10 @@ async def UserSignin(userModels: UserModel):
 async def UpdateService(updateServiceModels: ServicePatchModel):
 
     data = {
-        'service_name' :updateServiceModels.service_name,
+        'service_name' : updateServiceModels.service_name,
         'api_url'      : updateServiceModels.api_url,
         'permission'   : updateServiceModels.permission,
-        'service_id'   :updateServiceModels.service_id,
+        'service_id'   : updateServiceModels.service_id,
         'description'  : updateServiceModels.description,
         'method'       : updateServiceModels.method,
         'param_name'   : updateServiceModels.param_name,
@@ -73,5 +73,31 @@ async def UpdateService(updateServiceModels: ServicePatchModel):
         'desc'         : updateServiceModels.desc,
         'user_id'      : updateServiceModels.user_id
     }
-    
     return newController.UpdateService(data)
+#=====================================================================================================#
+
+@router.patch("/service/superuser/update-service")
+async def SuperuserUpdate(superuserUpdateModels: SuperUserPatchModel):
+    
+    data = {
+        'service_name' : superuserUpdateModels.service_name,
+        'api_url'      : superuserUpdateModels.api_url,
+        'permission'   : superuserUpdateModels.permission,
+        'service_id'   : superuserUpdateModels.service_id,
+        'description'  : superuserUpdateModels.description,
+        'method'       : superuserUpdateModels.method,
+        'param_name'   : superuserUpdateModels.param_name,
+        'param_type'   : superuserUpdateModels.param_type,
+        'desc'         : superuserUpdateModels.desc,
+        'status'       : superuserUpdateModels.status
+    }
+    return newController.SuperuserUpdate(data)
+#=====================================================================================================#
+@router.delete("/service/myapi/delete-service")
+async def DeleteService(deleteServiceModels: ServiceDeleteModel):
+    
+    data = {
+        'service_id': deleteServiceModels.service_id,
+        'user_id'   : deleteServiceModels.user_id
+    }
+    return newController.DeleteService(data)

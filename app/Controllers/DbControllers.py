@@ -35,6 +35,15 @@ class Controller :
     
     def UpdateService(self, data):
         return self.db.UpdateService(data, self.jsonout)
+#=====================================================================================================#
+
+    def SuperuserUpdate(self, data):
+        return self.db.SuperuserUpdate(data, self.jsonout)
+#=====================================================================================================#
+
+    def DeleteService(self, data):
+        return self.db.DeleteService(data, self.jsonout)
+#=====================================================================================================#
 
 
         

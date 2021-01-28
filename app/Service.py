@@ -33,3 +33,10 @@ class Service:
 
     def UpdateService(self, jsonout):
         return jsonout
+#=====================================================================================================#
+    def SuperuserUpdate(self, jsonout):
+        return jsonout
+#=====================================================================================================#
+
+    def DeleteService(self, jsonout):
+        return jsonout
