@@ -5,7 +5,7 @@ newUser = UserModel()
 #=====================================================================================================#
 
 #รับข้อมูลมาจาก main แล้วส่งไปยัง โมเดล
-def createServer(service_name, api_url, permission, description, user_id, method, param_name, param_type, desc):
+def createServer(service_name, api_url, permission, user_id, description, method, param_name, param_type, desc):
     newService.Obj_id       = ObjectId()
     newService.service_name = service_name
     newService.api_url      = api_url

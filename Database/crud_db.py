@@ -9,8 +9,7 @@ import datetime
 
 _services      = connect.db.service
 _users         = connect.db.user
-# _users_logs    = connec.db.userlogs
-# _services_logs = connec.db.servicelogs
+
 #=====================================================================================================#
 
 class DB:
@@ -120,6 +119,7 @@ class DB:
                     'message': 'Service name or Endpoint Already use',
                     'service_name': data['service_name']
                 }
+                
             
             else:
                 epoch     = time.time()
@@ -143,7 +143,7 @@ class DB:
             
         except Exception as e:
             print(e,(type,(e)))
-            msg = {'message': 'Service name or EndPoint Already use.'}
+            msg = {'message': 'Service name or EndPoint Already usee.'}
         jsonout = {'data': msg}
         return self.newService.ServiceAdd(jsonout)
 #=====================================================================================================#
@@ -163,7 +163,8 @@ class DB:
                 data['user_id'] = hash_lib
 
                 _users.insert_one(data)
-
+                self.newLogs.UserLogs(data)
+                
             for search in _users.find({'gg.gmail': data['gg']['gmail']}, {'gg.id_token': 0}):
                 msg = {
                     'message'     : 'Login Success',
