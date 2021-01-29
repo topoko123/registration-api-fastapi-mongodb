@@ -1,20 +1,22 @@
 import os
-import Database.Config.conn as connec
-from pymongo import MongoClient
+from Database.logs_db import Logs
+import Database.Config.conn as connect
 from app.Service import Service
 from hashlib import sha256
 import time
 import datetime
 #=====================================================================================================#
 
-_services = connec.db.service
-_users = connec.db.user
+_services      = connect.db.service
+_users         = connect.db.user
+# _users_logs    = connec.db.userlogs
+# _services_logs = connec.db.servicelogs
 #=====================================================================================================#
 
 class DB:
-
+    newLogs    = Logs()
     newService = Service()
-    total   = {}
+    total      = {}
 #=====================================================================================================#
 
     def ApiList(self, page, limit, jsonout): 
@@ -28,7 +30,7 @@ class DB:
                     service_id = find['service_id']
                     dict = {
                         'service_id'  : service_id,
-                        'service_name':find['service_name'],
+                        'service_name': find['service_name'],
                         'api_url'     : find['api_url'],
                         'permission'  : find['permission'],
                         'description' : find['description'],
@@ -115,7 +117,7 @@ class DB:
                 'api_url': data['api_url']
             }).count() > 0 :
                 msg = {
-                    'message': 'Service name or EntryPoint Already use',
+                    'message': 'Service name or Endpoint Already use',
                     'service_name': data['service_name']
                 }
             
@@ -129,8 +131,9 @@ class DB:
                 data['datetime'] = str(date_time)
                 hash_lib = sha256(str_epoch.encode('utf-8')).hexdigest()
                 data['service_id'] = hash_lib
-                
+
                 _services.insert_one(data)
+                self.newLogs.ServiceLogs(data)          
 
                 msg = {
                     'message'     : 'Create Success', 
@@ -140,7 +143,7 @@ class DB:
             
         except Exception as e:
             print(e,(type,(e)))
-            msg = {'message': 'Error'}
+            msg = {'message': 'Service name or EndPoint Already use.'}
         jsonout = {'data': msg}
         return self.newService.ServiceAdd(jsonout)
 #=====================================================================================================#
