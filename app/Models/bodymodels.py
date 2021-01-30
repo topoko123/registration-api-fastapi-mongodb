@@ -1,7 +1,9 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, HttpUrl
 from typing import Optional, List
 import requests
 from fastapi import Request, FastAPI
+
+
 #=====================================================================================================#
 
 class ServiceModel(BaseModel):
@@ -53,3 +55,13 @@ class SuperUserPatchModel(BaseModel):
     param_type      : List[str] = []
     desc            : Optional[str] = None
 #=====================================================================================================#
+
+class Demotest(BaseModel):
+    service_name : str
+    api_url      : str
+    permission   : str
+    user_id      : str
+    description  : Optional[str] = None
+    method       : str          
+    param_set    : list = []
+    desc         : Optional[str] = None

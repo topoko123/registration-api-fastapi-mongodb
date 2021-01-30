@@ -1,4 +1,5 @@
 import os
+from typing import List
 from Database.logs_db import Logs
 import Database.Config.conn as connect
 from app.Service import Service
@@ -9,7 +10,7 @@ import datetime
 
 _services      = connect.db.service
 _users         = connect.db.user
-
+# _demo          = connect.db.demo
 #=====================================================================================================#
 
 class DB:
@@ -164,7 +165,7 @@ class DB:
 
                 _users.insert_one(data)
                 self.newLogs.UserLogs(data)
-                
+
             for search in _users.find({'gg.gmail': data['gg']['gmail']}, {'gg.id_token': 0}):
                 msg = {
                     'message'     : 'Login Success',
@@ -303,3 +304,28 @@ class DB:
         jsonout = {'data': msg}
         return self.newService.SuperuserDelete(jsonout)
 #=====================================================================================================#
+
+    def Demo(self, data):
+        try:
+            param_name = []
+            param_type = []
+            for find in data['param_set']:
+                param_name.append(find['param_name'])
+                param_type.append(find['param_type'])
+                print(param_name)
+            dat = {
+                'service_name': data['service_name'],
+                'api_url' : data['api_url'],
+                'permission': data['permission'],
+                'user_id'  : data['user_id'],
+                'description': data['description'],
+                'method'    : data['method'],
+                'param_name': param_name,
+                'param_type': param_type,
+                'desc'      : data['desc']
+            }
+        except Exception as e:
+            print(e, (type,(e)))
+            dat = {'msg' : 'test'}
+        # jsonout = {'dat': dat}
+        return self.newService.Demo(dat)

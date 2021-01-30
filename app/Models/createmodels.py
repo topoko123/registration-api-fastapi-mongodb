@@ -2,6 +2,7 @@ from app.Models.db_models import ServiceModel, UserModel
 from bson import ObjectId
 newService = ServiceModel()
 newUser = UserModel()
+# newDemo = DemoTest()
 #=====================================================================================================#
 
 #รับข้อมูลมาจาก main แล้วส่งไปยัง โมเดล
@@ -23,4 +24,10 @@ def createUser(id_token, fullname, gmail, google_photo):
     return dict(newUser)
 #=====================================================================================================#
 
-
+# def createdemo(service_id, service_name, param_set):
+#     newDemo.Obj_id  = ObjectId()
+#     newDemo.service_id = service_id
+#     newDemo.service_name = service_name
+#     newDemo.param_set =  {'param_set': param_set}
+#     return dict(newDemo)
+    

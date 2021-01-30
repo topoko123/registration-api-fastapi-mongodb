@@ -8,6 +8,8 @@ class Controller :
     db = DB()
     newService = Service()
     jsonout    = {}
+    param_name = []
+    param_type = []
 #=====================================================================================================#
 
     def Index(self):
@@ -50,5 +52,6 @@ class Controller :
         return self.db.SuperuserDelete(service_id, status, self.jsonout)
 #=====================================================================================================#
 
-
+    def Demo(self, data):
+        return self.db.Demo(data)
         

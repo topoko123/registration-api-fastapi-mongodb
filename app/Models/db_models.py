@@ -19,3 +19,9 @@ class UserModel(Model):
     gg     = StringType(required=True)
     status = StringType(default='user')
 #=====================================================================================================#
+
+# class DemoTest(Model):
+#     Obj_id = ObjectId
+#     service_id   = StringType(required=True)
+#     service_name = StringType(required=True)
+#     param_set    = StringType(required=True)
