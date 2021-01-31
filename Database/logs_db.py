@@ -5,7 +5,6 @@ _users_logs = connect.db.userlogs
 _service_logs= connect.db.servicelogs
 #=====================================================================================================#
 
-
 class Logs :
 
     def UserLogs(self, data):   

@@ -110,7 +110,7 @@ class DB:
     def ServiceAdd(self, data, jsonout):
         try:
             dict(data)
-
+            
             if _services.find({
                 'service_name': data['service_name']
             }).count() > 0 or _services.find({

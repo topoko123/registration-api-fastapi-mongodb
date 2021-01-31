@@ -11,10 +11,10 @@ def createServer(service_name, api_url, permission, user_id, description, method
     newService.service_name = service_name
     newService.api_url      = api_url
     newService.permission   = permission
-    newService.method       = method
-    newService.description  = description
-    newService.param_set    = {'param_name': param_name, 'param_type': param_type, 'desc': desc}
     newService.user_id      = user_id
+    newService.description  = description
+    newService.method       = method
+    newService.param_set    = {'param_name': param_name, 'param_type': param_type, 'desc': desc}
     return dict(newService)
 #=====================================================================================================#
 
