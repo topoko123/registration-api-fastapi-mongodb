@@ -1,5 +1,7 @@
 import os
 from typing import List
+
+from pymongo.results import InsertOneResult
 from Database.logs_db import Logs
 import Database.Config.conn as connect
 from app.Service import Service
@@ -175,8 +177,6 @@ class DB:
                     'status'      : search['status']
                 }
                 break
-            else:
-                msg = {'message': 'Not Found'}
         except Exception as e:
             print (e, (type, (e)))
             msg = 'Error Login'
@@ -186,12 +186,11 @@ class DB:
 
     def UpdateService(self, data, jsonout):
         try:
-            for find in _services.find({'service_id': data['service_id'], 'user_id': data['user_id']}):
-                if (data['service_name'] and data['api_url'] and data['permission'] and 
-                    data['description'] and data['method'] and data['param_name'] and data['param_type'] and data['desc']) :
-
+            for find in _services.find({'service_id': data['service_id']}):
+                if (data['service_name'] and data['api_url'] and data['description'] and data['method'] 
+                    and data['param_name'] and data['param_type'] and data['desc'] ):
                     _services.update_one({
-                        'service_id': data['service_id']
+                        'service_id': data['service_id'], 'user_id': data['user_id']
                     },
                     {
                         '$set': {
@@ -202,10 +201,12 @@ class DB:
                             'method'      : data['method'],
                             'param_set.param_name': data['param_name'],
                             'param_set.param_type': data['param_type'],
-                            'param_set.desc'      : data['desc']
+                            'param_set.param_desc': data['desc']
                         }
                     })
-
+                    data['datetime'] = str(datetime.datetime.utcnow().replace(microsecond=0)+\
+                    datetime.timedelta(hours=7))
+                    self.newLogs.UpdateLogs(data)
                     msg = {
                         'message'     : 'Update Success',
                         'service_name': data['service_name'],
@@ -214,14 +215,15 @@ class DB:
                         'description' : data['description'],
                         'param_name'  : data['param_name'],
                         'param_type'  : data['param_type'],
-                        'desc'        : data['desc']
+                        'desc'        : data['desc'],
+                        'datetime'    : data['datetime']
                     }
                     break
                 else:
-                    msg = {'message': 'Update Failed'}
+                    msg = {'msg': 'Data Not Found'}
             else:
-                msg = {'message': 'Not found'}
-        
+                msg = {'msg': 'Service_id or User_id Not Found'}
+                       
         except Exception as e:
             print (e, (type, (e)))
             msg = 'Error'
@@ -249,6 +251,10 @@ class DB:
                         }
                     })
 
+                    data['datetime'] = str(datetime.datetime.utcnow().replace(microsecond=0)+\
+                        datetime.timedelta(hours=7))
+                    self.newLogs.UpdateLogs(data)
+
                     msg = {
                         'message'     : 'Update Success',
                         'service_name': data['service_name'],
@@ -259,6 +265,7 @@ class DB:
                         'param_type'  : data['param_type'],
                         'desc'        : data['desc']
                     }
+
                     break
                 else :
                     msg = {'message': 'Not Found'}
@@ -277,9 +284,11 @@ class DB:
             for find in _services.find({'service_id': data['service_id'], 'user_id': data['user_id']}):
                 _services.delete_one({'service_id': data['service_id'], 'user_id': data['user_id']})
                 msg = {'message': 'Delete Success'}
+
+                data['datetime'] = str(datetime.datetime.utcnow().replace(microsecond=0)+\
+                    datetime.timedelta(hours=7))
+                self.newLogs.DeleteLogs(data)
                 break
-            else:
-                msg = {'message': 'Not Found'}
         except Exception as e:
             print (e, (type,(e)))
             msg = {'message': 'Error'}
@@ -289,10 +298,14 @@ class DB:
 
     def SuperuserDelete(self, servcie_id, status, jsonout):
         try:
+            
             if status == 'superuser':
                 for find in _services.find({'service_id': servcie_id}):
                     _services.delete_one({'service_id': servcie_id})
                     msg = {'message': 'Delete Success'}
+                    date_time = str(datetime.datetime.utcnow().replace(microsecond=0)+\
+                        datetime.timedelta(hours=7))
+                    self.newLogs.DeleteLogs(status, date_time)
                     break
                 else:
                     msg = {'message': 'Not Found'}
@@ -309,9 +322,11 @@ class DB:
         try:
             param_name = []
             param_type = []
+            desc       = []
             for find in data['param_set']:
                 param_name.append(find['param_name'])
                 param_type.append(find['param_type'])
+                desc.append(find['desc'])
                 print(param_name)
             dat = {
                 'service_name': data['service_name'],
@@ -322,10 +337,12 @@ class DB:
                 'method'    : data['method'],
                 'param_name': param_name,
                 'param_type': param_type,
-                'desc'      : data['desc']
+                'desc'      : desc
             }
         except Exception as e:
             print(e, (type,(e)))
             dat = {'msg' : 'test'}
         # jsonout = {'dat': dat}
         return self.newService.Demo(dat)
+#=====================================================================================================#
+

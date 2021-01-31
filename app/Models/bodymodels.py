@@ -15,7 +15,7 @@ class ServiceModel(BaseModel):
     method       : str
     param_name   : List[str] = []
     param_type   : List[str] = []
-    desc         : Optional[str] = None
+    desc         : List[str] = []
 #=====================================================================================================#
 
 class UserModel(BaseModel):
@@ -39,7 +39,7 @@ class ServicePatchModel(BaseModel):
     method          : Optional[str] = None
     param_name      : List[str] = []
     param_type      : List[str] = []
-    desc            : Optional[str] = None
+    desc            : List[str] = []
     user_id         : str
 #=====================================================================================================#
 
@@ -53,7 +53,7 @@ class SuperUserPatchModel(BaseModel):
     method          : Optional[str] = None
     param_name      : List[str] = []
     param_type      : List[str] = []
-    desc            : Optional[str] = None
+    desc            : List[str] = []
 #=====================================================================================================#
 
 class Demotest(BaseModel):
@@ -64,4 +64,6 @@ class Demotest(BaseModel):
     description  : Optional[str] = None
     method       : str          
     param_set    : list = []
-    desc         : Optional[str] = None
+    
+
+

@@ -3,6 +3,8 @@ import Database.Config.conn as connect
 _users      = connect.db.user
 _users_logs = connect.db.userlogs
 _service_logs= connect.db.servicelogs
+_update_logs = connect.db.updatelogs
+_delete_logs = connect.db.deletelogs
 #=====================================================================================================#
 
 class Logs :
@@ -16,8 +18,6 @@ class Logs :
                     'datetime' : find['datetime']
                 }
                 break
-            else:
-                data_logs = {'msg': 'Not Found'}
         except Exception as e:
             print (e,(type,(e))) 
             data_logs = {'msg': 'Error'}                          #insert user_log collections
@@ -35,11 +35,38 @@ class Logs :
                     'datetime'    : data['datetime']
                 }
                 break
-            else:
-                data_logs = {'msg' 'failed'}
+
         except Exception as e:
             print(e,(type,(e)))
-            data_logs = 'Error'
+            data_logs = {'msg':'Error'}
         return _service_logs.insert_one(data_logs)
 #=====================================================================================================#
 
+    def UpdateLogs(self, data):
+        try:
+            data_logs = {}
+            for find in _users.find({'user_id': data['user_id']}):
+                data_logs = {
+                    'gg': find['gg']['gmail'],
+                    'service_name': data['service_name'],
+                    'operation'   : 'update_service',
+                    'datetime'    : data['datetime']
+                }
+        except Exception as e:
+            print(e,(type,(e)))
+            data_logs = {'msg':'Error'}
+        return _update_logs.insert_one(data_logs)
+#=====================================================================================================#
+
+    def DeleteLogs(self, data):
+        try:
+            for find in _users.find({'user_id': data['user_id']}):
+                data_logs = {
+                    'gg': find['gg']['gmail'],
+                    'operation': 'delete_service',
+                    'datetime' : data['datetime']
+                }
+        except Exception as e:
+            print(e,(type,(e)))
+            data_logs = {'msg': 'Error'}
+        return _delete_logs.insert_one(data_logs)

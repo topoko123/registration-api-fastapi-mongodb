@@ -118,8 +118,7 @@ async def Demo(demoTest: Demotest):
         'user_id'      : demoTest.user_id,
         'description'  : demoTest.description,
         'method'       : demoTest.method.upper(),
-        'param_set'    : demoTest.param_set,
-        'desc'         : demoTest.desc,
+        'param_set'    : demoTest.param_set
     }
     return newController.Demo(data)
 
