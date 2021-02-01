@@ -23,6 +23,8 @@ class DB:
 
     def ApiList(self, page, limit, jsonout): 
         try:        
+            jsonout = {}
+
             startat = (page - 1) * limit
             for find in _services.find({'permission': 'public'}, 
                     {'unix_time': 0}).skip(startat).limit(limit):
@@ -53,26 +55,18 @@ class DB:
 
     def MyApiList(self, page, limit, user_id, jsonout):
         try:
+            jsonout = {}
             startat = (page - 1) * limit
-            for find in _services.find({'user_id': user_id}, {'unix_time':0}):
-                for search in _users.find({'user_id': find['user_id']}, 
-                    {'unix_time': 0, 'gg.id_token': 0}):
+            for find in _services.find({'user_id': user_id}):
+                for search in _users.find({'user_id': find['user_id']}, {'unix_time': 0, 'gg.id_token': 0}):
 
-                    service_id = find['service_id']
+                    service_id = find['service_id']            
                     dict = {
-                        'service_id'  : service_id,
-                        'service_name': find['service_name'],
-                        'api_url'     : find['api_url'],
-                        'permission'  : find['permission'],
-                        'description' : find['description'],
-                        'method'      : find['method'],
-                        'param_name'  : find['param_set']['param_name'],
-                        'param_type'  : find['param_set']['param_type'],
-                        'desc'        : find['param_set']['desc'],
-                        'gmail'       : search['gg']['gmail'],
-                        'datetime'    : find['datetime']
+                        'service_id': find['service_id'], 'service_name': find['service_name'], 'user_id': find['user_id'], 'gg': search['gg']['gmail']
                     }
                     jsonout[service_id] = dict
+                   
+                    
             self.total['total'] = _services.count({'user_id': user_id})
         except Exception as e:
             print(e, (type, (e)))
@@ -82,6 +76,7 @@ class DB:
 
     def SuperuserList(self, page, limit, status, jsonout):
         try:
+            jsonout = {}
             startat = (page - 1) * limit
             if status == 'superuser':
                 for find in _services.find().skip(startat).limit(limit):
@@ -111,6 +106,7 @@ class DB:
 
     def ServiceAdd(self, data, jsonout):
         try:
+            jsonout = {}
             dict(data)
             
             if _services.find({
@@ -134,7 +130,7 @@ class DB:
                 data['datetime'] = str(date_time)
                 hash_lib = sha256(str_epoch.encode('utf-8')).hexdigest()
                 data['service_id'] = hash_lib
-
+    
                 _services.insert_one(data)
                 self.newLogs.ServiceLogs(data)          
 
@@ -153,9 +149,9 @@ class DB:
 
     def UserSignin(self, data, jsonout):
         try:
+            jsonout = {}
+
             dict(data)
-            
-            
             for find in _users.find({'gg.gmail': data['gg']['gmail']}, {'gg.id_token': 0}):
                 print ('ok')
                 break
@@ -186,6 +182,8 @@ class DB:
 
     def UpdateService(self, data, jsonout):
         try:
+            jsonout = {}
+
             for find in _services.find({'service_id': data['service_id']}):
                 if (data['service_name'] and data['api_url'] and data['description'] and data['method'] 
                     and data['param_name'] and data['param_type'] and data['desc'] ):
@@ -201,7 +199,7 @@ class DB:
                             'method'      : data['method'],
                             'param_set.param_name': data['param_name'],
                             'param_set.param_type': data['param_type'],
-                            'param_set.param_desc': data['desc']
+                            'param_set.desc': data['desc']
                         }
                     })
                     data['datetime'] = str(datetime.datetime.utcnow().replace(microsecond=0)+\
@@ -233,6 +231,8 @@ class DB:
 
     def SuperuserUpdate(self, data, jsonout):
         try:
+            jsonout = {}
+
             if data['status'] == 'superuser':
                 for find in _services.find({'service_id': data['service_id']}):
                     _services.update_one({
@@ -281,6 +281,8 @@ class DB:
 
     def DeleteService(self, data, jsonout):
         try:
+            jsonout = {}
+
             for find in _services.find({'service_id': data['service_id'], 'user_id': data['user_id']}):
                 _services.delete_one({'service_id': data['service_id'], 'user_id': data['user_id']})
                 msg = {'message': 'Delete Success'}
@@ -298,6 +300,7 @@ class DB:
 
     def SuperuserDelete(self, servcie_id, status, jsonout):
         try:
+            jsonout = {}
             
             if status == 'superuser':
                 for find in _services.find({'service_id': servcie_id}):
@@ -320,6 +323,8 @@ class DB:
 
     def Demo(self, data):
         try:
+           
+
             param_name = []
             param_type = []
             desc       = []
