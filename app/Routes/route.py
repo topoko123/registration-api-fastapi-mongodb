@@ -38,12 +38,10 @@ async def ServiceAdd(serviceModels: ServiceModel):
     user_id      = serviceModels.user_id
     description  = serviceModels.description
     method       = serviceModels.method
-    param_name   = serviceModels.param_name
-    param_type   = serviceModels.param_type
-    desc         = serviceModels.desc
+    param_set    = serviceModels.param_set
     
     data = createServer(service_name, api_url, permission, user_id, description, 
-            method, param_name, param_type, desc)
+            method, param_set)
     return newController.ServiceAdd(data)
 #=====================================================================================================#
 
@@ -68,9 +66,7 @@ async def UpdateService(updateServiceModels: ServicePatchModel):
         'service_id'   : updateServiceModels.service_id,
         'description'  : updateServiceModels.description,
         'method'       : updateServiceModels.method,
-        'param_name'   : updateServiceModels.param_name,
-        'param_type'   : updateServiceModels.param_type,
-        'desc'         : updateServiceModels.desc,
+        'param_set'    : updateServiceModels.param_set,
         'user_id'      : updateServiceModels.user_id
     }
     return newController.UpdateService(data)

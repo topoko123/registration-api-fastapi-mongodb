@@ -196,7 +196,7 @@ class DB:
 
             for find in _services.find({'service_id': data['service_id']}):
                 if (data['service_name'] and data['api_url'] and data['description'] and data['method'] 
-                    and data['param_name'] and data['param_type'] and data['desc'] ):
+                    and data['param_set'] ):
                     _services.update_one({
                         'service_id': data['service_id'], 'user_id': data['user_id']
                     },
@@ -207,9 +207,7 @@ class DB:
                             'permission'  : data['permission'],
                             'description' : data['description'],
                             'method'      : data['method'],
-                            'param_set.param_name': data['param_name'],
-                            'param_set.param_type': data['param_type'],
-                            'param_set.desc': data['desc']
+                            'param_set'   : data['param_set']
                         }
                     })
                     data['datetime'] = str(datetime.datetime.utcnow().replace(microsecond=0)+\
@@ -221,9 +219,7 @@ class DB:
                         'api_url'     : data['api_url'],
                         'permission'  : data['permission'],
                         'description' : data['description'],
-                        'param_name'  : data['param_name'],
-                        'param_type'  : data['param_type'],
-                        'desc'        : data['desc'],
+                        'param_set'   : data['param_set'],
                         'datetime'    : data['datetime']
                     }
                     break

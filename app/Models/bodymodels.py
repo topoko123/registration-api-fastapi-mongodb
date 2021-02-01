@@ -12,9 +12,7 @@ class ServiceModel(BaseModel):
     user_id      : str
     description  : Optional[str] = None
     method       : str
-    param_name   : List[str] = []
-    param_type   : List[str] = []
-    desc         : List[str] = []
+    param_set    : list = []
 #=====================================================================================================#
 
 class UserModel(BaseModel):
@@ -36,9 +34,7 @@ class ServicePatchModel(BaseModel):
     service_id      : str
     description     : Optional[str] = None
     method          : Optional[str] = None
-    param_name      : List[str] = []
-    param_type      : List[str] = []
-    desc            : List[str] = []
+    param_set       : list = []
     user_id         : str
 #=====================================================================================================#
 
