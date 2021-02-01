@@ -57,12 +57,22 @@ class DB:
         try:
             jsonout = {}
             startat = (page - 1) * limit
-            for find in _services.find({'user_id': user_id}):
+            for find in _services.find({'user_id': user_id}).skip(startat).limit(limit):
                 for search in _users.find({'user_id': find['user_id']}, {'unix_time': 0, 'gg.id_token': 0}):
 
                     service_id = find['service_id']            
                     dict = {
-                        'service_id': find['service_id'], 'service_name': find['service_name'], 'user_id': find['user_id'], 'gg': search['gg']['gmail']
+                        'service_id'  : service_id,
+                        'service_name': find['service_name'],
+                        'api_url'     : find['api_url'],
+                        'permission'  : find['permission'],
+                        'description' : find['description'],
+                        'method'      : find['method'],
+                        'param_name'  : find['param_set']['param_name'],
+                        'param_type'  : find['param_set']['param_type'],
+                        'desc'        : find['param_set']['desc'],
+                        'gmail'       : search['gg']['gmail'],
+                        'datetime'    : find['datetime']
                     }
                     jsonout[service_id] = dict
                    
