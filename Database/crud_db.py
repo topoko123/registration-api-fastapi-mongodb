@@ -39,11 +39,9 @@ class DB:
                         'permission'  : find['permission'],
                         'description' : find['description'],
                         'method'      : find['method'],
-                        'param_name'  : find['param_set']['param_name'],
-                        'param_type'  : find['param_set']['param_type'],
-                        'desc'        : find['param_set']['desc'],
-                        'gmail'       : search['gg']['gmail'],
-                        'datetime'    : find['datetime']
+                        'param_set'   : find['param_set'],
+                        'gg'          : search['gg']['gmail'],
+                        'datetime'    : find['datetime'] 
                     }
                     jsonout[service_id] = dict
             self.total['total'] = _services.count({'permission': 'public'})
@@ -69,7 +67,8 @@ class DB:
                         'description' : find['description'],
                         'method'      : find['method'],
                         'param_set'   : find['param_set'],
-                        'datetime'    : find['datetime']
+                        'gg'          : search['gg']['gmail'],
+                        'datetime'    : find['datetime']             
                     }
                     jsonout[service_id] = dict
                    
@@ -97,6 +96,7 @@ class DB:
                             'description' : find['description'],
                             'method'      : find['method'],
                             'param_set'   : find['param_set'],
+                            'gg'          : search['gg']['gmail'],
                             'datetime'    : find['datetime']
                         }
                         jsonout[service_id] = dict 
