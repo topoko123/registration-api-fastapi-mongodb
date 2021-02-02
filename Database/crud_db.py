@@ -287,15 +287,16 @@ class DB:
 
     def SuperuserDelete(self, service_id, user_id, status, jsonout):
         try:
-           
             jsonout = {}
             for state in _users.find({'user_id': user_id, 'status': status}):
                 for find in _services.find({'service_id': service_id}):
                     _services.delete_one({'service_id': service_id})
                     msg = {'message': 'Delete Success'}
+
                     break
-                else :
-                    msg = {'message': 'Noo'}   
+                else:
+                    msg = {'message': 'Not Found'}
+                break  
             else:
                 msg = {'message':'You not permission!'}
         except Exception as e:
