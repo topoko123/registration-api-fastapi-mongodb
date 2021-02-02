@@ -46,9 +46,7 @@ class SuperUserPatchModel(BaseModel):
     status          : Optional[str] = None
     description     : Optional[str] = None
     method          : Optional[str] = None
-    param_name      : List[str] = []
-    param_type      : List[str] = []
-    desc            : List[str] = []
+    param_set       : list = []
 #=====================================================================================================#
 
 class Demotest(BaseModel):

@@ -82,9 +82,7 @@ async def SuperuserUpdate(superuserUpdateModels: SuperUserPatchModel):
         'service_id'   : superuserUpdateModels.service_id,
         'description'  : superuserUpdateModels.description,
         'method'       : superuserUpdateModels.method,
-        'param_name'   : superuserUpdateModels.param_name,
-        'param_type'   : superuserUpdateModels.param_type,
-        'desc'         : superuserUpdateModels.desc,
+        'param_set'    : superuserUpdateModels.param_set,
         'status'       : superuserUpdateModels.status
     }
     return newController.SuperuserUpdate(data)

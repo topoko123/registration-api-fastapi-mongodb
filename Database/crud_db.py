@@ -68,10 +68,7 @@ class DB:
                         'permission'  : find['permission'],
                         'description' : find['description'],
                         'method'      : find['method'],
-                        'param_name'  : find['param_set']['param_name'],
-                        'param_type'  : find['param_set']['param_type'],
-                        'desc'        : find['param_set']['desc'],
-                        'gmail'       : search['gg']['gmail'],
+                        'param_set'   : find['param_set'],
                         'datetime'    : find['datetime']
                     }
                     jsonout[service_id] = dict
@@ -99,10 +96,7 @@ class DB:
                             'permission'  : find['permission'],
                             'description' : find['description'],
                             'method'      : find['method'],
-                            'param_name'  : find['param_set']['param_name'],
-                            'param_type'  : find['param_set']['param_type'],
-                            'desc'        : find['param_set']['desc'],
-                            'gmail'       : search['gg']['gmail'],
+                            'param_set'   : find['param_set'],
                             'datetime'    : find['datetime']
                         }
                         jsonout[service_id] = dict 
@@ -193,7 +187,6 @@ class DB:
     def UpdateService(self, data, jsonout):
         try:
             jsonout = {}
-
             for find in _services.find({'service_id': data['service_id']}):
                 if (data['service_name'] and data['api_url'] and data['description'] and data['method'] 
                     and data['param_set'] ):
@@ -227,7 +220,7 @@ class DB:
                     msg = {'msg': 'Data Not Found'}
             else:
                 msg = {'msg': 'Service_id or User_id Not Found'}
-                       
+                
         except Exception as e:
             print (e, (type, (e)))
             msg = 'Error'
@@ -251,9 +244,7 @@ class DB:
                             'permission'   : data['permission'],
                             'description'  : data['description'],
                             'method'       : data['method'],
-                            'param_set.param_name' : data['param_name'],
-                            'param_set.param_type' : data['param_type'],
-                            'param_set.desc': data['desc']
+                            'param_set'    : data['param_set']
                         }
                     })
 
@@ -267,9 +258,7 @@ class DB:
                         'api_url'     : data['api_url'],
                         'permission'  : data['permission'],
                         'description' : data['description'],
-                        'para_name'   : data['param_name'],
-                        'param_type'  : data['param_type'],
-                        'desc'        : data['desc']
+                        'param_set'   : data['param_set']
                     }
 
                     break
