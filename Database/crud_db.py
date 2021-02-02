@@ -80,11 +80,11 @@ class DB:
         return self.newService.MyApiList(jsonout, self.total)
 #=====================================================================================================#
 
-    def SuperuserList(self, page, limit, status, jsonout):
+    def SuperuserList(self, page, limit, user_id, status, jsonout):
         try:
             jsonout = {}
             startat = (page - 1) * limit
-            if status == 'superuser':
+            for state in _users.find({'user_id': user_id, 'status': status}):
                 for find in _services.find().skip(startat).limit(limit):
                     for search in _users.find({'user_id': find['user_id']}, {'unix_time': 0, 'gg.id_token': 0}):
                         service_id = find['service_id']
@@ -100,8 +100,7 @@ class DB:
                             'datetime'    : find['datetime']
                         }
                         jsonout[service_id] = dict 
-            else:
-                raise Exception('The status does not match the superuser', status)
+                
             self.total['total'] = _services.count()
         except Exception as e:
             print(e, (type,(e)))
@@ -122,8 +121,6 @@ class DB:
                     'message': 'Service name or Endpoint Already use',
                     'service_name': data['service_name']
                 }
-                
-            
             else:
                 epoch     = time.time()
                 str_epoch = str(epoch)
@@ -143,7 +140,6 @@ class DB:
                     'service_name': data['service_name'],
                     'api_url'     : data['api_url']
                 }
-            
         except Exception as e:
             print(e,(type,(e)))
             msg = {'message': 'Service name or EndPoint Already usee.'}
@@ -231,9 +227,8 @@ class DB:
     def SuperuserUpdate(self, data, jsonout):
         try:
             jsonout = {}
-
-            if data['status'] == 'superuser':
-                for find in _services.find({'service_id': data['service_id']}):
+            for find in _users.find({'user_id': data['user_id'], 'status': data['status']}):
+                for search in _services.find({'service_id': data['service_id']}):
                     _services.update_one({
                         'service_id': data['service_id']
                     },
@@ -260,13 +255,10 @@ class DB:
                         'description' : data['description'],
                         'param_set'   : data['param_set']
                     }
-
                     break
-                else :
-                    msg = {'message': 'Not Found'}
-            else:
-                 msg = {'message': 'The status does not match the superuser'}
-
+                break
+            else :
+                msg = {'message': 'Not Found'}
         except Exception as e:
             print (e,(type,(e)))
             msg = 'Error'
@@ -293,33 +285,28 @@ class DB:
         return self.newService.DeleteService(jsonout)
 #=====================================================================================================#
 
-    def SuperuserDelete(self, servcie_id, status, jsonout):
+    def SuperuserDelete(self, service_id, user_id, status, jsonout):
         try:
+           
             jsonout = {}
-            
-            if status == 'superuser':
-                for find in _services.find({'service_id': servcie_id}):
-                    _services.delete_one({'service_id': servcie_id})
+            for state in _users.find({'user_id': user_id, 'status': status}):
+                for find in _services.find({'service_id': service_id}):
+                    _services.delete_one({'service_id': service_id})
                     msg = {'message': 'Delete Success'}
-                    date_time = str(datetime.datetime.utcnow().replace(microsecond=0)+\
-                        datetime.timedelta(hours=7))
-                    self.newLogs.DeleteLogs(status, date_time)
                     break
-                else:
-                    msg = {'message': 'Not Found'}
+                else :
+                    msg = {'message': 'Noo'}   
             else:
-                msg = {'message': 'The status does not match the superuser'}
+                msg = {'message':'You not permission!'}
         except Exception as e:
             print(e,(type,(e)))
             msg = {'message': 'Error'}
         jsonout = {'data': msg}
-        return self.newService.SuperuserDelete(jsonout)
+        return jsonout
 #=====================================================================================================#
 
     def Demo(self, data):
         try:
-           
-
             param_name = []
             param_type = []
             desc       = []

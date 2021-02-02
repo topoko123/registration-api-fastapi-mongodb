@@ -47,6 +47,7 @@ class SuperUserPatchModel(BaseModel):
     description     : Optional[str] = None
     method          : Optional[str] = None
     param_set       : list = []
+    user_id         : Optional[str] = None
 #=====================================================================================================#
 
 class Demotest(BaseModel):

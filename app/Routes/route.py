@@ -26,8 +26,8 @@ async def MyApiList(page: int, limit: int, user_id: str):
 #=====================================================================================================#
 
 @router.get("/service/superuser/list")
-async def SuperuserList(page: int, limit: int, status: str):
-    return newController.SuperuserList(page, limit, status)
+async def SuperuserList(page: int, limit: int, user_id: str, status: str):
+    return newController.SuperuserList(page, limit, user_id, status)
 #=====================================================================================================#
 
 @router.post("/service/myapi/add-service")
@@ -83,7 +83,8 @@ async def SuperuserUpdate(superuserUpdateModels: SuperUserPatchModel):
         'description'  : superuserUpdateModels.description,
         'method'       : superuserUpdateModels.method,
         'param_set'    : superuserUpdateModels.param_set,
-        'status'       : superuserUpdateModels.status
+        'status'       : superuserUpdateModels.status,
+        'user_id'      : superuserUpdateModels.user_id
     }
     return newController.SuperuserUpdate(data)
 #=====================================================================================================#
@@ -99,8 +100,8 @@ async def DeleteService(deleteServiceModels: ServiceDeleteModel):
 #=====================================================================================================#
 
 @router.delete("/service/superuser/delete-service")
-async def SuperuserDelete(service_id: str, status: str):
-    return newController.SuperuserDelete(service_id, status)
+async def SuperuserDelete(service_id: str, user_id: str, status: str):
+    return newController.SuperuserDelete(service_id, user_id, status)
 #=====================================================================================================#
 
 @router.post ("/service/demo")

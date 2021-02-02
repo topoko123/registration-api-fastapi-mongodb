@@ -24,8 +24,8 @@ class Controller :
         return self.db.MyApiList(page, limit, user_id, self.jsonout)
 #=====================================================================================================#
 
-    def SuperuserList(self, page, limit, status):
-        return self.db.SuperuserList(page, limit, status, self.jsonout)
+    def SuperuserList(self, page, limit, user_id, status):
+        return self.db.SuperuserList(page, limit, user_id, status, self.jsonout)
 #=====================================================================================================#
 
     def ServiceAdd(self, data):
@@ -48,8 +48,8 @@ class Controller :
         return self.db.DeleteService(data, self.jsonout)
 #=====================================================================================================#
 
-    def SuperuserDelete(self, service_id, status):
-        return self.db.SuperuserDelete(service_id, status, self.jsonout)
+    def SuperuserDelete(self, service_id, user_id, status):
+        return self.db.SuperuserDelete(service_id, user_id, status, self.jsonout)
 #=====================================================================================================#
 
     def Demo(self, data):
