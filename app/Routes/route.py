@@ -2,7 +2,7 @@ import os
 from fastapi import APIRouter
 from starlette.requests import Request
 from app.Controllers.DbControllers import Controller
-from app.Models.bodymodels import ServiceModel, UserModel, ServiceDeleteModel, ServicePatchModel, SuperUserPatchModel,Demotest   
+from app.Models.bodymodels import ServiceModel, UserModel, ServiceDeleteModel, ServicePatchModel, SuperUserPatchModel 
 from app.Models.createmodels import createServer, createUser 
 
 #=====================================================================================================#
@@ -106,16 +106,4 @@ async def SuperuserDelete(service_id: str, user_id: str, status: str):
     return newController.SuperuserDelete(service_id, user_id, status)
 #=====================================================================================================#
 
-@router.post ("/service/demo")
-async def Demo(demoTest: Demotest):
-    data = {
-        'service_name' : demoTest.service_name,                             
-        'api_url'      : demoTest.api_url.lower(),
-        'permission'   : demoTest.permission.lower(),
-        'user_id'      : demoTest.user_id,
-        'description'  : demoTest.description,
-        'method'       : demoTest.method.upper(),
-        'param_set'    : demoTest.param_set
-    }
-    return newController.Demo(data)
 

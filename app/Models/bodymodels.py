@@ -50,14 +50,7 @@ class SuperUserPatchModel(BaseModel):
     user_id         : Optional[str] = None
 #=====================================================================================================#
 
-class Demotest(BaseModel):
-    service_name : str
-    api_url      : str
-    permission   : str
-    user_id      : str
-    description  : Optional[str] = None
-    method       : str          
-    param_set    : list = []
+
     
 
 

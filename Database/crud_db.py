@@ -20,60 +20,62 @@ class DB:
     def ApiList(self, page, limit, jsonout): 
         try:        
             jsonout = {}
-
+            i=0
             startat = (page - 1) * limit
-            for find in _services.find({'permission': 'public'}, 
-                    {'unix_time': 0}).skip(startat).limit(limit):
-                for search in _users.find({'user_id': find['user_id']}, 
-                    {'unix_time': 0, 'gg.id_token': 0}):
-                    for state in find['param_set']:
-                        service_id = find['service_id']
-                        state['om'] = state.pop('param_name')
-                        state['oy'] = state.pop('param_type')
-                        state['sv'] = state.pop('desc')
-                        dict = {
-                            'ao'  : service_id,
-                            'am'  : find['service_name'],
-                            'wo'  : find['api_url'],
-                            'od'  : find['permission'],
-                            'sy'  : find['description'],
-                            'ny'  : find['method'],
-                            'oa'  : find['param_set'],
-                            'fh'  : search['gg']['gmail'],
-                            'fy'  : find['datetime']
-                        }
-                        jsonout[service_id] = dict
+            for find in _services.find({'permission': 'public'}).skip(startat).limit(limit):
+                start = _users.find({'user_id' : find['user_id']})
+                for state in find['param_set']:
+                    service_id = find['service_id']
+                    state['om'] = state.pop('param_name')
+                    state['oy'] = state.pop('param_type')
+                    state['sv'] = state.pop('desc')
+                    dict = {
+                        'ao'  : service_id,
+                        'am'  : find['service_name'],
+                        'wo'  : find['api_url'],
+                        'od'  : find['permission'],
+                        'sy'  : find['description'],
+                        'ny'  : find['method'],
+                        'oa'  : find['param_set'],
+                        'fh'  : start[i]['gg']['gmail'],
+                        'fy'  : find['datetime']
+                    }
+                    
+                    
+                    jsonout[service_id] = dict
             self.total['total'] = _services.count({'permission': 'public'})
         except Exception as e:
             print (e, (type,(e)))
-
         return self.newService.ApiList(jsonout, self.total)
 #=====================================================================================================#
 
     def MyApiList(self, page, limit, user_id, jsonout):
         try:
             jsonout = {}
+            start = _users.find({'user_id' : user_id})
+            i=0
             startat = (page - 1) * limit
             for find in _services.find({'user_id': user_id}).skip(startat).limit(limit):
-                for search in _users.find({'user_id': find['user_id']}, {'unix_time': 0, 'gg.id_token': 0}):
-                    for state in find['param_set']:
-                        service_id = find['service_id']
-                        state['om'] = state.pop('param_name')
-                        state['oy'] = state.pop('param_type')
-                        state['sv'] = state.pop('desc')          
-                        dict = {
-                            'ao'  : service_id,
-                            'am'  : find['service_name'],
-                            'wo'  : find['api_url'],
-                            'od'  : find['permission'],
-                            'sy'  : find['description'],
-                            'ny'  : find['method'],
-                            'oa'  : find['param_set'],
-                            'fh'  : search['gg']['gmail'],
-                            'fy'  : find['datetime']             
-                        }
-                        jsonout[service_id] = dict
-                   
+                for state in find['param_set']:
+                    
+                    service_id = find['service_id']
+                    state['om'] = state.pop('param_name')
+                    state['oy'] = state.pop('param_type')
+                    state['sv'] = state.pop('desc')          
+                    dict = {
+                        'ao'  : service_id,
+                        'am'  : find['service_name'],
+                        'wo'  : find['api_url'],
+                        'od'  : find['permission'],
+                        'sy'  : find['description'],
+                        'ny'  : find['method'],
+                        'oa'  : find['param_set'],
+                        'fh'  : start[i]['gg']['gmail'],
+                        'fy'  : find['datetime']             
+                    }
+                    jsonout[service_id] = dict
+                    
+                
             self.total['total'] = _services.count({'user_id': user_id})
         except Exception as e:
             print(e, (type, (e)))
@@ -85,34 +87,38 @@ class DB:
         try:
             jsonout = {}
             startat = (page - 1) * limit
-            for state in _users.find({'user_id': user_id, 'status': status}):
-                for find in _services.find().skip(startat).limit(limit):
-                    for search in _users.find({'user_id': find['user_id']}, {'unix_time': 0, 'gg.id_token': 0}):
-                        for state in find['param_set']:
-                            service_id = find['service_id']
-                            state['om'] = state.pop('param_name')
-                            state['oy'] = state.pop('param_type')
-                            state['sv'] = state.pop('desc')
-                            dict = {
-                                'ao'  : service_id,
-                                'am'  : find['service_name'],
-                                'wo'  : find['api_url'],
-                                'od'  : find['permission'],
-                                'sy'  : find['description'],
-                                'ny'  : find['method'],
-                                'oa'  : find['param_set'],
-                                'fh'  : search['gg']['gmail'],
-                                'fy'  : find['datetime']
-                            }
-                            jsonout[service_id] = dict 
-                break
-            else:
-                dict = {'message': 'You not permission!!'}
-                jsonout['msg'] = dict 
+
+            state = _users.find({'user_id': user_id})
+            assert state.count() != 0, 'Data not foud'
+            assert state[0]['status'] == status, 'You not permission!!'
+           
+            for find in _services.find().skip(startat).limit(limit):
+                for search in _users.find({'user_id': find['user_id']}):
+                    for changkey in find['param_set']:
+                        service_id = find['service_id']
+                        changkey['om'] = changkey.pop('param_name')
+                        changkey['oy'] = changkey.pop('param_type')
+                        changkey['sv'] = changkey.pop('desc')
+                        dict = {
+                            'ao'  : service_id,
+                            'am'  : find['service_name'],
+                            'wo'  : find['api_url'],
+                            'od'  : find['permission'],
+                            'sy'  : find['description'],
+                            'ny'  : find['method'],
+                            'oa'  : find['param_set'],
+                            'fh'  : search['gg']['gmail'],
+                            'fy'  : find['datetime']
+                        }
+                        jsonout[service_id] = dict 
+                
             self.total['total'] = _services.count()
-        except Exception as e:
-            print(e, (type,(e)))
-            msg = {'message': 'NotFound'}
+
+        except AssertionError as e:
+            print (e)
+            jsonout['alert'] = str(e)
+            return jsonout
+    
         return self.newService.SuperuserList(jsonout, self.total)
 #=====================================================================================================#
 
@@ -159,11 +165,10 @@ class DB:
     def UserSignin(self, data, jsonout):
         try:
             jsonout = {}
-
-            dict(data)
-            for find in _users.find({'gg.gmail': data['gg']['gmail']}, {'gg.id_token': 0}):
-                print ('ok')
-                break
+            if _users.find({
+                'gg.gmail': data['gg']['gmail']
+            }).count() > 0:
+                pass
             else:
                 epoch = time.time()
                 data['unix_time'] = str(epoch)
@@ -173,15 +178,15 @@ class DB:
                 _users.insert_one(data)
                 self.newLogs.UserLogs(data)
 
-            for search in _users.find({'gg.gmail': data['gg']['gmail']}, {'gg.id_token': 0}):
-                msg = {
-                    'message': 'Login Success',
-                    'yo'     : search['user_id'],
-                    'ff'     : search['gg']['gmail'],
-                    'fo'     : search['gg']['google_photo'],
-                    'ar'     : search['status']
-                }
-                break
+            state = _users.find({'gg.gmail': data['gg']['gmail']})
+            msg = {
+                'message': 'Login Success',
+                'yo'     : state[0]['user_id'],
+                'ff'     : state[0]['gg']['gmail'],
+                'fo'     : state[0]['gg']['google_photo'],
+                'ar'     : state[0]['status']
+            }
+
         except Exception as e:
             print (e, (type, (e)))
             msg = 'Error Login'
@@ -192,139 +197,111 @@ class DB:
     def UpdateService(self, data, jsonout):
         try:
             jsonout = {}
-            for find in _services.find({'service_id': data['service_id']}):
-                if (data['service_name'] and data['api_url'] and data['description'] and data['method'] 
-                    and data['param_set'] ):
-                    _services.update_one({
-                        'service_id': data['service_id'], 'user_id': data['user_id']
-                    },
-                    {
-                        '$set': {
-                            'service_name': data['service_name'],
-                            'api_url'     : data['api_url'],
-                            'permission'  : data['permission'],
-                            'description' : data['description'],
-                            'method'      : data['method'],
-                            'param_set'   : data['param_set']
-                        }
-                    })
-                    data['datetime'] = str(datetime.datetime.utcnow().replace(microsecond=0)+\
-                    datetime.timedelta(hours=7))
-                    self.newLogs.UpdateLogs(data)
-                    msg = {'message': 'Update Success'}
-                    break
-                else:
-                    msg = {'msg': 'Data Not Found'}
+            state = _services.find({'service_id': data['service_id']})
+            assert state.count()       != 0, 'Service not found'
+            assert state[0]['user_id'] == data['user_id'], 'ID not found'
+
+            if (data['service_name'] and data['api_url'] and data['description'] and data['method'] 
+                and data['param_set'] ):
+                _services.update_one({
+                    'service_id': data['service_id'], 'user_id': data['user_id']
+                },
+                {
+                    '$set': {
+                        'service_name': data['service_name'],
+                        'api_url'     : data['api_url'],
+                        'permission'  : data['permission'],
+                        'description' : data['description'],
+                        'method'      : data['method'],
+                        'param_set'   : data['param_set']
+                    }
+                })
+                data['datetime'] = str(datetime.datetime.utcnow().replace(microsecond=0)+\
+                datetime.timedelta(hours=7))
+                self.newLogs.UpdateLogs(data)
+                msg = {'message': 'Update Success'}
+
             else:
-                msg = {'msg': 'Service_id or User_id Not Found'}
-                
-        except Exception as e:
-            print (e, (type, (e)))
-            msg = 'Error'
-        jsonout = {'data': msg}
+                msg = 'Update Failed'
+        except AssertionError as e:
+            msg = str(e)
+        jsonout['alert'] = msg
         return self.newService.UpdateService(jsonout)
 #=====================================================================================================#
 
     def SuperuserUpdate(self, data, jsonout):
         try:
             jsonout = {}
-            for find in _users.find({'user_id': data['user_id'], 'status': data['status']}):
-                for search in _services.find({'service_id': data['service_id']}):
-                    _services.update_one({
-                        'service_id': data['service_id']
-                    },
-                    {
-                        '$set':{
-                            'service_name' : data['service_name'],
-                            'api_url'      : data['api_url'],
-                            'permission'   : data['permission'],
-                            'description'  : data['description'],
-                            'method'       : data['method'],
-                            'param_set'    : data['param_set']
-                        }
-                    })
+            state   = _users.find({'user_id': data['user_id']})
+            assert state.count()      != 0, 'ID not found'
+            assert state[0]['status'] == data['status'], 'You not permission'
+            
+            if (data['service_name'] and data['api_url'] and data['description'] and data['method'] 
+                and data['param_set'] ): 
+            
+                _services.update_one({
+                    'service_id': data['service_id']
+                },
+                {
+                    '$set':{
+                        'service_name' : data['service_name'],
+                        'api_url'      : data['api_url'],
+                        'permission'   : data['permission'],
+                        'description'  : data['description'],
+                        'method'       : data['method'],
+                        'param_set'    : data['param_set']
+                    }
+                })
+                msg = 'Update Success'
+                data['datetime'] = str(datetime.datetime.utcnow().replace(microsecond=0)+\
+                    datetime.timedelta(hours=7))
+                self.newLogs.UpdateLogs(data)
+            else:
+                msg = 'Update Failed'
+        except AssertionError as e:
+            msg = str(e)
 
-                    data['datetime'] = str(datetime.datetime.utcnow().replace(microsecond=0)+\
-                        datetime.timedelta(hours=7))
-                    self.newLogs.UpdateLogs(data)
-
-                    msg = {'message': 'Update Success'}
-                    break
-                break
-            else :
-                msg = {'message': 'Not Found'}
-        except Exception as e:
-            print (e,(type,(e)))
-            msg = 'Error'
-        jsonout = {'data': msg}
+        jsonout['alert'] = msg
         return self.newService.SuperuserUpdate(jsonout)
 #=====================================================================================================#
 
     def DeleteService(self, data, jsonout):
         try:
             jsonout = {}
+            state   = _services.find({'service_id': data['service_id']})
 
-            for find in _services.find({'service_id': data['service_id'], 'user_id': data['user_id']}):
-                _services.delete_one({'service_id': data['service_id'], 'user_id': data['user_id']})
-                msg = {'message': 'Delete Success'}
+            assert state.count()       != 0, 'Service not found'
+            assert state[0]['user_id'] == data['user_id'], 'ID not found'
 
-                data['datetime'] = str(datetime.datetime.utcnow().replace(microsecond=0)+\
-                    datetime.timedelta(hours=7))
-                self.newLogs.DeleteLogs(data)
-                break
-        except Exception as e:
-            print (e, (type,(e)))
-            msg = {'message': 'Error'}
-        jsonout = {'data': msg}
+            _services.delete_one({'service_id': data['service_id'], 'user_id': data['user_id']})
+            msg = 'Delete Success'
+
+            data['datetime'] = str(datetime.datetime.utcnow().replace(microsecond=0)+\
+                datetime.timedelta(hours=7))
+            self.newLogs.DeleteLogs(data)
+               
+        except AssertionError as e:
+            msg = str(e)
+        jsonout['alert'] = msg
         return self.newService.DeleteService(jsonout)
 #=====================================================================================================#
 
     def SuperuserDelete(self, service_id, user_id, status, jsonout):
         try:
-            jsonout = {}
-            for state in _users.find({'user_id': user_id, 'status': status}):
-                for find in _services.find({'service_id': service_id}):
-                    _services.delete_one({'service_id': service_id})
-                    msg = {'message': 'Delete Success'}
+            jsonout= {}
+            state  = _users.find({'user_id': user_id})
+            states = _services.find({'service_id': service_id})
 
-                    break
-                else:
-                    msg = {'message': 'Not Found'}
-                break  
-            else:
-                msg = {'message':'You not permission!'}
-        except Exception as e:
-            print(e,(type,(e)))
-            msg = {'message': 'Error'}
-        jsonout = {'data': msg}
-        return jsonout
+            assert state.count()      != 0, 'Id not found'
+            assert state[0]['status'] == status, 'You not permission'
+            assert states.count()     != 0, 'Service not found'
+
+            _services.delete_one({'service_id': service_id})
+            msg = 'Delete Success'
+
+        except AssertionError as e:
+            msg = str(e)
+
+        jsonout['alert'] = msg
+        return self.newService.SuperuserDelete(jsonout)
 #=====================================================================================================#
-
-    def Demo(self, data):
-        try:
-            param_name = []
-            param_type = []
-            desc       = []
-            for find in data['param_set']:
-                param_name.append(find['param_name'])
-                param_type.append(find['param_type'])
-                desc.append(find['desc'])
-                print(param_name)
-            dat = {
-                'service_name': data['service_name'],
-                'api_url' : data['api_url'],
-                'permission': data['permission'],
-                'user_id'  : data['user_id'],
-                'description': data['description'],
-                'method'    : data['method'],
-                'param_name': param_name,
-                'param_type': param_type,
-                'desc'      : desc
-            }
-        except Exception as e:
-            print(e, (type,(e)))
-            dat = {'msg' : 'test'}
-        # jsonout = {'dat': dat}
-        return self.newService.Demo(dat)
-#=====================================================================================================#
-

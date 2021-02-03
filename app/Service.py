@@ -47,9 +47,3 @@ class Service:
     def SuperuserDelete(self, jsonout):
         return jsonout
 #=====================================================================================================#
-    
-    def Demo(self, dat):
-        print (dat)
-        request = requests.post(url="https://fastpymongo.herokuapp.com/v1/api/service/myapi/add-service", json=dat)
-        response = request.json()
-        return response
