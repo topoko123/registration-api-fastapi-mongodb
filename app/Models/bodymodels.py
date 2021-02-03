@@ -46,7 +46,7 @@ class SuperUserPatchModel(BaseModel):
     status          : Optional[str] = None
     description     : Optional[str] = None
     method          : Optional[str] = None
-    param_set       : list = []
+    param_set       : Optional[List] = []
     user_id         : Optional[str] = None
 #=====================================================================================================#
 

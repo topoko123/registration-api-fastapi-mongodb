@@ -1,7 +1,3 @@
-import os
-from typing import List
-
-from pymongo.results import InsertOneResult
 from Database.logs_db import Logs
 import Database.Config.conn as connect
 from app.Service import Service
@@ -30,20 +26,23 @@ class DB:
                     {'unix_time': 0}).skip(startat).limit(limit):
                 for search in _users.find({'user_id': find['user_id']}, 
                     {'unix_time': 0, 'gg.id_token': 0}):
-
-                    service_id = find['service_id']
-                    dict = {
-                        'service_id'  : service_id,
-                        'service_name': find['service_name'],
-                        'api_url'     : find['api_url'],
-                        'permission'  : find['permission'],
-                        'description' : find['description'],
-                        'method'      : find['method'],
-                        'param_set'   : find['param_set'],
-                        'gg'          : search['gg']['gmail'],
-                        'datetime'    : find['datetime'] 
-                    }
-                    jsonout[service_id] = dict
+                    for state in find['param_set']:
+                        service_id = find['service_id']
+                        state['om'] = state.pop('param_name')
+                        state['oy'] = state.pop('param_type')
+                        state['sv'] = state.pop('desc')
+                        dict = {
+                            'ao'  : service_id,
+                            'am'  : find['service_name'],
+                            'wo'  : find['api_url'],
+                            'od'  : find['permission'],
+                            'sy'  : find['description'],
+                            'ny'  : find['method'],
+                            'oa'  : find['param_set'],
+                            'fh'  : search['gg']['gmail'],
+                            'sy'  : find['datetime']
+                        }
+                        jsonout[service_id] = dict
             self.total['total'] = _services.count({'permission': 'public'})
         except Exception as e:
             print (e, (type,(e)))
@@ -57,22 +56,24 @@ class DB:
             startat = (page - 1) * limit
             for find in _services.find({'user_id': user_id}).skip(startat).limit(limit):
                 for search in _users.find({'user_id': find['user_id']}, {'unix_time': 0, 'gg.id_token': 0}):
-
-                    service_id = find['service_id']            
-                    dict = {
-                        'service_id'  : service_id,
-                        'service_name': find['service_name'],
-                        'api_url'     : find['api_url'],
-                        'permission'  : find['permission'],
-                        'description' : find['description'],
-                        'method'      : find['method'],
-                        'param_set'   : find['param_set'],
-                        'gg'          : search['gg']['gmail'],
-                        'datetime'    : find['datetime']             
-                    }
-                    jsonout[service_id] = dict
+                    for state in find['param_set']:
+                        service_id = find['service_id']
+                        state['om'] = state.pop('param_name')
+                        state['oy'] = state.pop('param_type')
+                        state['sv'] = state.pop('desc')          
+                        dict = {
+                            'ao'  : service_id,
+                            'am'  : find['service_name'],
+                            'wo'  : find['api_url'],
+                            'od'  : find['permission'],
+                            'sy'  : find['description'],
+                            'ny'  : find['method'],
+                            'oa'  : find['param_set'],
+                            'fh'  : search['gg']['gmail'],
+                            'sy'  : find['datetime']             
+                        }
+                        jsonout[service_id] = dict
                    
-                    
             self.total['total'] = _services.count({'user_id': user_id})
         except Exception as e:
             print(e, (type, (e)))
@@ -87,23 +88,31 @@ class DB:
             for state in _users.find({'user_id': user_id, 'status': status}):
                 for find in _services.find().skip(startat).limit(limit):
                     for search in _users.find({'user_id': find['user_id']}, {'unix_time': 0, 'gg.id_token': 0}):
-                        service_id = find['service_id']
-                        dict = {
-                            'service_id'  : service_id,
-                            'service_name': find['service_name'],
-                            'api_url'     : find['api_url'],
-                            'permission'  : find['permission'],
-                            'description' : find['description'],
-                            'method'      : find['method'],
-                            'param_set'   : find['param_set'],
-                            'gg'          : search['gg']['gmail'],
-                            'datetime'    : find['datetime']
-                        }
-                        jsonout[service_id] = dict 
-                
+                        for state in find['param_set']:
+                            service_id = find['service_id']
+                            state['om'] = state.pop('param_name')
+                            state['oy'] = state.pop('param_type')
+                            state['sv'] = state.pop('desc')
+                            dict = {
+                                'ao'  : service_id,
+                                'am'  : find['service_name'],
+                                'wo'  : find['api_url'],
+                                'od'  : find['permission'],
+                                'sy'  : find['description'],
+                                'ny'  : find['method'],
+                                'oa'  : find['param_set'],
+                                'fh'  : search['gg']['gmail'],
+                                'sy'  : find['datetime']
+                            }
+                            jsonout[service_id] = dict 
+                break
+            else:
+                dict = {'message': 'You not permission!!'}
+                jsonout['msg'] = dict 
             self.total['total'] = _services.count()
         except Exception as e:
             print(e, (type,(e)))
+            msg = {'message': 'NotFound'}
         return self.newService.SuperuserList(jsonout, self.total)
 #=====================================================================================================#
 
@@ -136,9 +145,9 @@ class DB:
                 self.newLogs.ServiceLogs(data)          
 
                 msg = {
-                    'message'     : 'Create Success', 
-                    'service_name': data['service_name'],
-                    'api_url'     : data['api_url']
+                    'message': 'Create Success', 
+                    'am'     : data['service_name'],
+                    'wo'     : data['api_url']
                 }
         except Exception as e:
             print(e,(type,(e)))
@@ -166,11 +175,11 @@ class DB:
 
             for search in _users.find({'gg.gmail': data['gg']['gmail']}, {'gg.id_token': 0}):
                 msg = {
-                    'message'     : 'Login Success',
-                    'user_id'     : search['user_id'],
-                    'gmail'       : search['gg']['gmail'],
-                    'google_photo': search['gg']['google_photo'],
-                    'status'      : search['status']
+                    'message': 'Login Success',
+                    'yo'     : search['user_id'],
+                    'ff'     : search['gg']['gmail'],
+                    'fo'     : search['gg']['google_photo'],
+                    'ar'     : search['status']
                 }
                 break
         except Exception as e:
@@ -202,15 +211,7 @@ class DB:
                     data['datetime'] = str(datetime.datetime.utcnow().replace(microsecond=0)+\
                     datetime.timedelta(hours=7))
                     self.newLogs.UpdateLogs(data)
-                    msg = {
-                        'message'     : 'Update Success',
-                        'service_name': data['service_name'],
-                        'api_url'     : data['api_url'],
-                        'permission'  : data['permission'],
-                        'description' : data['description'],
-                        'param_set'   : data['param_set'],
-                        'datetime'    : data['datetime']
-                    }
+                    msg = {'message': 'Update Success'}
                     break
                 else:
                     msg = {'msg': 'Data Not Found'}
@@ -247,14 +248,7 @@ class DB:
                         datetime.timedelta(hours=7))
                     self.newLogs.UpdateLogs(data)
 
-                    msg = {
-                        'message'     : 'Update Success',
-                        'service_name': data['service_name'],
-                        'api_url'     : data['api_url'],
-                        'permission'  : data['permission'],
-                        'description' : data['description'],
-                        'param_set'   : data['param_set']
-                    }
+                    msg = {'message': 'Update Success'}
                     break
                 break
             else :
