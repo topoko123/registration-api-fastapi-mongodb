@@ -1,9 +1,11 @@
+from typing import Dict, Optional, Tuple
 from Database.logs_db import Logs
-import Database.Config.conn as connect
 from app.Service import Service
 from hashlib import sha256
+import Database.Config.conn as connect
 import time
 import datetime
+from app.staterole import UserRole as user_role
 #=====================================================================================================#
 
 _services      = connect.db.service
@@ -17,7 +19,7 @@ class DB:
     total      = {}
 #=====================================================================================================#
 
-    def ApiList(self, page, limit, jsonout): 
+    def ApiList(self, page: int, limit: int, jsonout: Optional[Dict]) -> Tuple[Dict[str, str], Dict[str, int]]: 
         try:        
             jsonout = {}
             i=0
@@ -65,7 +67,7 @@ class DB:
         return self.newService.ApiList(jsonout, self.total)
 #=====================================================================================================#
 
-    def MyApiList(self, page, limit, user_id, jsonout):
+    def MyApiList(self, page: int, limit: int, user_id: int, jsonout: Optional[Dict]) -> Tuple[Dict[str, str], Dict[str, int]]:
         try:
             jsonout = {}
             i=0
@@ -116,7 +118,8 @@ class DB:
         return self.newService.MyApiList(jsonout, self.total)
 #=====================================================================================================#
 
-    def SuperuserList(self, page, limit, user_id, status, jsonout):
+    def SuperuserList(self, page: int, limit: int, user_id: str, status: str, 
+                        jsonout: Optional[Dict]) -> Tuple[Dict[str, str], Dict[str, int]]:
         try:
             jsonout = {}
             startat = (page - 1) * limit
@@ -172,7 +175,7 @@ class DB:
         return self.newService.SuperuserList(jsonout, self.total)
 #=====================================================================================================#
 
-    def ServiceAdd(self, data, jsonout):
+    def ServiceAdd(self, data: Dict[str,str], jsonout: Optional[Dict]) -> Dict[str, str]:
         try:
             jsonout = {}
             dict(data)
@@ -212,7 +215,7 @@ class DB:
         return self.newService.ServiceAdd(jsonout)
 #=====================================================================================================#
 
-    def UserSignin(self, data, jsonout):
+    def UserSignin(self, data, jsonout) -> Dict[str, str]:
         try:
             jsonout = {}
             if _users.find({
@@ -244,7 +247,7 @@ class DB:
         return self.newService.UserSignin(jsonout)
 #=====================================================================================================#
 
-    def UpdateService(self, data, jsonout):
+    def UpdateService(self, data, jsonout) -> Dict[str, str]:
         try:
             jsonout = {}
             state = _services.find({'service_id': data['service_id']})
@@ -279,7 +282,7 @@ class DB:
         return self.newService.UpdateService(jsonout)
 #=====================================================================================================#
 
-    def SuperuserUpdate(self, data, jsonout):
+    def SuperuserUpdate(self, data, jsonout) :
         try:
             jsonout = {}
             state   = _users.find({'user_id': data['user_id']})
@@ -336,16 +339,10 @@ class DB:
         return self.newService.DeleteService(jsonout)
 #=====================================================================================================#
 
-    def SuperuserDelete(self, service_id, user_id, status, jsonout):
+    def SuperuserDelete(self, service_id: str, user_id: str, status: str, jsonout: str) -> Dict[str, str]:
         try:
             jsonout= {}
-            state  = _users.find({'user_id': user_id})
-            states = _services.find({'service_id': service_id})
-
-            assert state.count()      != 0, 'Id not found'
-            assert state[0]['status'] == status, 'You not permission'
-            assert states.count()     != 0, 'Service not found'
-
+            user_role.SuperuserDel(service_id, user_id, status)
             _services.delete_one({'service_id': service_id})
             msg = 'Delete Success'
 

@@ -34,7 +34,7 @@ class ServicePatchModel(BaseModel):
     service_id      : str
     description     : Optional[str] = None
     method          : Optional[str] = None
-    param_set       : list = []
+    param_set       : list = [] 
     user_id         : str
 #=====================================================================================================#
 

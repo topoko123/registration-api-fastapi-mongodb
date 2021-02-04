@@ -1,3 +1,4 @@
+from typing import Dict
 import requests
 import fastapi
 from starlette import responses
@@ -44,6 +45,6 @@ class Service:
         return jsonout
 #=====================================================================================================#
 
-    def SuperuserDelete(self, jsonout):
+    def SuperuserDelete(self, jsonout: Dict[str, str]) -> Dict[str, str] :
         return jsonout
 #=====================================================================================================#

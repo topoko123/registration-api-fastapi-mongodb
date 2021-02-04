@@ -1,8 +1,8 @@
-import os
+from typing import Dict, Tuple
 from fastapi import APIRouter
-from starlette.requests import Request
 from app.Controllers.DbControllers import Controller
-from app.Models.bodymodels import ServiceModel, UserModel, ServiceDeleteModel, ServicePatchModel, SuperUserPatchModel 
+from app.Models.bodymodels import ServiceModel, UserModel, ServiceDeleteModel, ServicePatchModel, \
+    SuperUserPatchModel 
 from app.Models.createmodels import createServer, createUser 
 
 #=====================================================================================================#
@@ -18,22 +18,22 @@ async def Index():
 #=====================================================================================================#     
 
 @router.get("/service/list")
-async def ApiList(page : int, limit: int):
+async def ApiList(page : int, limit: int) -> Tuple[int, int]:
     return newController.ApiList(page, limit)
 #=====================================================================================================#
 
 @router.get("/service/myapi/list")
-async def MyApiList(page: int, limit: int, user_id: str):
+async def MyApiList(page: int, limit: int, user_id: str) -> Tuple[int, int, str]:
     return newController.MyApiList(page, limit, user_id)
 #=====================================================================================================#
 
 @router.get("/service/superuser/list")
-async def SuperuserList(page: int, limit: int, user_id: str, status: str):
+async def SuperuserList(page: int, limit: int, user_id: str, status: str) -> Tuple[int, int, str, str]:
     return newController.SuperuserList(page, limit, user_id, status)
 #=====================================================================================================#
 
 @router.post("/service/myapi/add-service")
-async def ServiceAdd(serviceModels: ServiceModel):
+async def ServiceAdd(serviceModels: ServiceModel) -> Dict[str, str]:
     service_name = serviceModels.service_name
     api_url      = serviceModels.api_url.lower()
     permission   = serviceModels.permission.lower()
@@ -48,7 +48,7 @@ async def ServiceAdd(serviceModels: ServiceModel):
 #=====================================================================================================#
 
 @router.post("/login")
-async def UserSignin(userModels: UserModel):
+async def UserSignin(userModels: UserModel) -> Dict[str, str]:
     id_token      = userModels.id_token
     fullname      = userModels.fullname
     gmail         = userModels.gmail
@@ -59,7 +59,7 @@ async def UserSignin(userModels: UserModel):
 #=====================================================================================================#
 
 @router.patch("/service/myapi/update-service")
-async def UpdateService(updateServiceModels: ServicePatchModel):
+async def UpdateService(updateServiceModels: ServicePatchModel) -> Dict[str, str]:
 
     data = {
         'service_name' : updateServiceModels.service_name,
@@ -75,7 +75,7 @@ async def UpdateService(updateServiceModels: ServicePatchModel):
 #=====================================================================================================#
 
 @router.patch("/service/superuser/update-service")
-async def SuperuserUpdate(superuserUpdateModels: SuperUserPatchModel):
+async def SuperuserUpdate(superuserUpdateModels: SuperUserPatchModel) -> Dict[str, str]:
     
     data = {
         'service_name' : superuserUpdateModels.service_name,
@@ -92,7 +92,7 @@ async def SuperuserUpdate(superuserUpdateModels: SuperUserPatchModel):
 #=====================================================================================================#
 
 @router.delete("/service/myapi/delete-service")
-async def DeleteService(deleteServiceModels: ServiceDeleteModel):
+async def DeleteService(deleteServiceModels: ServiceDeleteModel) -> Dict[str, str]:
     
     data = {
         'service_id': deleteServiceModels.service_id,
@@ -102,7 +102,7 @@ async def DeleteService(deleteServiceModels: ServiceDeleteModel):
 #=====================================================================================================#
 
 @router.delete("/service/superuser/delete-service")
-async def SuperuserDelete(service_id: str, user_id: str, status: str):
+async def SuperuserDelete(service_id: str, user_id: str, status: str) ->Tuple[str, str, str]:
     return newController.SuperuserDelete(service_id, user_id, status)
 #=====================================================================================================#
 
