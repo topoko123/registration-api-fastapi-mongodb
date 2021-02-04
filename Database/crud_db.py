@@ -120,7 +120,7 @@ class DB:
         try:
             jsonout = {}
             startat = (page - 1) * limit
-
+            i=0
             state = _users.find({'user_id': user_id})
             assert state.count() != 0, 'Data not foud'
             assert state[0]['status'] == status, 'You not permission!!'
