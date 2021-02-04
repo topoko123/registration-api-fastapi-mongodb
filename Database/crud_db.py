@@ -24,11 +24,9 @@ class DB:
             startat = (page - 1) * limit
             for find in _services.find({'permission': 'public'}).skip(startat).limit(limit):
                 start = _users.find({'user_id' : find['user_id']})
-                for state in find['param_set']:
-                    service_id = find['service_id']
-                    state['om'] = state.pop('param_name')
-                    state['oy'] = state.pop('param_type')
-                    state['sv'] = state.pop('desc')
+                service_id = find['service_id']
+                if find['param_set'] == [] :
+    
                     dict = {
                         'ao'  : service_id,
                         'am'  : find['service_name'],
@@ -40,28 +38,14 @@ class DB:
                         'fh'  : start[i]['gg']['gmail'],
                         'fy'  : find['datetime']
                     }
-                    
-                    
                     jsonout[service_id] = dict
-            self.total['total'] = _services.count({'permission': 'public'})
-        except Exception as e:
-            print (e, (type,(e)))
-        return self.newService.ApiList(jsonout, self.total)
-#=====================================================================================================#
-
-    def MyApiList(self, page, limit, user_id, jsonout):
-        try:
-            jsonout = {}
-            start = _users.find({'user_id' : user_id})
-            i=0
-            startat = (page - 1) * limit
-            for find in _services.find({'user_id': user_id}).skip(startat).limit(limit):
-                for state in find['param_set']:
                     
-                    service_id = find['service_id']
-                    state['om'] = state.pop('param_name')
-                    state['oy'] = state.pop('param_type')
-                    state['sv'] = state.pop('desc')          
+                else:
+                    for state in find['param_set']:
+                        state['om'] = state.pop('param_name')
+                        state['oy'] = state.pop('param_type')
+                        state['sv'] = state.pop('desc')
+
                     dict = {
                         'ao'  : service_id,
                         'am'  : find['service_name'],
@@ -71,9 +55,58 @@ class DB:
                         'ny'  : find['method'],
                         'oa'  : find['param_set'],
                         'fh'  : start[i]['gg']['gmail'],
-                        'fy'  : find['datetime']             
+                        'fy'  : find['datetime']
                     }
                     jsonout[service_id] = dict
+
+            self.total['total'] = _services.count({'permission': 'public'})
+        except Exception as e:
+            print (e, (type,(e)))
+        return self.newService.ApiList(jsonout, self.total)
+#=====================================================================================================#
+
+    def MyApiList(self, page, limit, user_id, jsonout):
+        try:
+            jsonout = {}
+            i=0
+            startat = (page - 1) * limit
+            for find in _services.find({'user_id': user_id}).skip(startat).limit(limit):
+                start = _users.find({'user_id' : user_id})
+                service_id = find['service_id']
+                if find['param_set'] == [] :
+
+                    dict = {
+                        'ao'  : service_id,
+                        'am'  : find['service_name'],
+                        'wo'  : find['api_url'],
+                        'od'  : find['permission'],
+                        'sy'  : find['description'],
+                        'ny'  : find['method'],
+                        'oa'  : find['param_set'],
+                        'fh'  : start[i]['gg']['gmail'],
+                        'fy'  : find['datetime']
+                    }
+                    jsonout[service_id] = dict
+                    
+                else: 
+                    for state in find['param_set']:
+                        state['om'] = state.pop('param_name')
+                        state['oy'] = state.pop('param_type')
+                        state['sv'] = state.pop('desc')
+
+                    dict = {
+                        'ao'  : 'service_id',
+                        'am'  : find['service_name'],
+                        'wo'  : find['api_url'],
+                        'od'  : find['permission'],
+                        'sy'  : find['description'],
+                        'ny'  : find['method'],
+                        'oa'  : find['param_set'],
+                        'fh'  : start[i]['gg']['gmail'],
+                        'fy'  : find['datetime']
+                    }
+                    jsonout[service_id] = dict
+                
                     
                 
             self.total['total'] = _services.count({'user_id': user_id})
@@ -93,24 +126,41 @@ class DB:
             assert state[0]['status'] == status, 'You not permission!!'
            
             for find in _services.find().skip(startat).limit(limit):
-                for search in _users.find({'user_id': find['user_id']}):
-                    for changkey in find['param_set']:
-                        service_id = find['service_id']
-                        changkey['om'] = changkey.pop('param_name')
-                        changkey['oy'] = changkey.pop('param_type')
-                        changkey['sv'] = changkey.pop('desc')
-                        dict = {
-                            'ao'  : service_id,
-                            'am'  : find['service_name'],
-                            'wo'  : find['api_url'],
-                            'od'  : find['permission'],
-                            'sy'  : find['description'],
-                            'ny'  : find['method'],
-                            'oa'  : find['param_set'],
-                            'fh'  : search['gg']['gmail'],
-                            'fy'  : find['datetime']
-                        }
-                        jsonout[service_id] = dict 
+                start = _users.find({'user_id': find['user_id']})
+                service_id = find['service_id']
+                if find['param_set'] == [] :
+
+                    dict = {
+                        'ao'  : service_id,
+                        'am'  : find['service_name'],
+                        'wo'  : find['api_url'],
+                        'od'  : find['permission'],
+                        'sy'  : find['description'],
+                        'ny'  : find['method'],
+                        'oa'  : find['param_set'],
+                        'fh'  : start[i]['gg']['gmail'],
+                        'fy'  : find['datetime']
+                    }
+                    jsonout[service_id] = dict
+                    
+                else: 
+                    for state in find['param_set']:
+                        state['om'] = state.pop('param_name')
+                        state['oy'] = state.pop('param_type')
+                        state['sv'] = state.pop('desc')
+
+                    dict = {
+                        'ao'  : 'service_id',
+                        'am'  : find['service_name'],
+                        'wo'  : find['api_url'],
+                        'od'  : find['permission'],
+                        'sy'  : find['description'],
+                        'ny'  : find['method'],
+                        'oa'  : find['param_set'],
+                        'fh'  : start[i]['gg']['gmail'],
+                        'fy'  : find['datetime']
+                    }
+                    jsonout[service_id] = dict 
                 
             self.total['total'] = _services.count()
 
