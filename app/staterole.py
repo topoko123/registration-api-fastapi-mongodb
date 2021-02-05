@@ -7,7 +7,7 @@ _users         = connect.db.user
 class UserRole :
 
 
-    def SuperuserList(user_id, status) -> AssertionError :
+    def SuperuserList(user_id: str, status: str) -> AssertionError :
         _state_user = _users.find({'user_id': user_id})
         
         assert _state_user.count() != 0, 'Id not found'
