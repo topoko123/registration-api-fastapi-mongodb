@@ -14,37 +14,37 @@ class Service:
         return result
 #=====================================================================================================#
 
-    def ApiList(self, jsonout, total):
+    def ApiList(self, jsonout: Dict[str,str], total: Dict[str, int]) -> Dict:
         return jsonout, total
 #=====================================================================================================#
 
-    def MyApiList(self, jsonout, total):
+    def MyApiList(self, jsonout: Dict[str,str], total: Dict[str, int]) -> Dict:
         return jsonout, total
 #=====================================================================================================#
 
-    def SuperuserList(self, jsonout, total):
+    def SuperuserList(self, jsonout: Dict[str,str], total: Dict[str, int]) -> Dict:
         return jsonout, total
 #=====================================================================================================#
 
-    def ServiceAdd(self, jsonout):
+    def ServiceAdd(self, jsonout: Dict[str,str]) -> Dict:
         return jsonout
 #=====================================================================================================#
 
-    def UserSignin(self, jsonout):
+    def UserSignin(self, jsonout: Dict[str,str]) -> Dict :
         return jsonout
 #=====================================================================================================#
 
-    def UpdateService(self, jsonout):
+    def UpdateService(self, jsonout: Dict[str,str]) -> Dict :
         return jsonout
 #=====================================================================================================#
-    def SuperuserUpdate(self, jsonout):
-        return jsonout
-#=====================================================================================================#
-
-    def DeleteService(self, jsonout):
+    def SuperuserUpdate(self, jsonout: Dict[str,str]) -> Dict:
         return jsonout
 #=====================================================================================================#
 
-    def SuperuserDelete(self, jsonout: Dict[str, str]) -> Dict[str, str] :
+    def DeleteService(self, jsonout: Dict[str,str]) -> Dict:
+        return jsonout
+#=====================================================================================================#
+
+    def SuperuserDelete(self, jsonout: Dict[str,str]) -> Dict:
         return jsonout
 #=====================================================================================================#

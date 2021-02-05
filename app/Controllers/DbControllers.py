@@ -16,38 +16,38 @@ class Controller :
         return self.newService.Index()
 #=====================================================================================================#
 
-    def ApiList(self, page: int, limit: int) -> Tuple[int, int, Dict]:
+    def ApiList(self, page, limit) :
         return self.db.ApiList(page, limit, self.jsonout)
 #=====================================================================================================#
 
-    def MyApiList(self, page: int, limit: int, user_id: str) -> Tuple[int, int, str, Dict] :
+    def MyApiList(self, page, limit, user_id)  :
         return self.db.MyApiList(page, limit, user_id, self.jsonout)
 #=====================================================================================================#
 
-    def SuperuserList(self, page: int, limit: int, user_id: str, status: str) -> Tuple[int, int, str, str, Dict] :
+    def SuperuserList(self, page, limit, user_id, status) :
         return self.db.SuperuserList(page, limit, user_id, status, self.jsonout)
 #=====================================================================================================#
 
-    def ServiceAdd(self, data: Dict[str,str]) -> Dict[str, str]:
+    def ServiceAdd(self, data):
         return self.db.ServiceAdd(data, self.jsonout)
 #=====================================================================================================#
 
-    def UserSignin(self, data: Dict[str,str]) -> Dict[str, str]:
+    def UserSignin(self, data) :
         return self.db.UserSignin(data, self.jsonout)
 #=====================================================================================================#
     
-    def UpdateService(self, data: Dict[str,str]) -> Dict[str, str]:
+    def UpdateService(self, data) :
         return self.db.UpdateService(data, self.jsonout)
 #=====================================================================================================#
 
-    def SuperuserUpdate(self, data: Dict[str,str]) -> Dict[str, str]:
+    def SuperuserUpdate(self, data) :
         return self.db.SuperuserUpdate(data, self.jsonout)
 #=====================================================================================================#
 
-    def DeleteService(self, data: Dict[str,str]) -> Dict[str, str]:
+    def DeleteService(self, data) :
         return self.db.DeleteService(data, self.jsonout)
 #=====================================================================================================#
 
-    def SuperuserDelete(self, service_id: str, user_id: str, status: str) -> Tuple[str, str, str] :
+    def SuperuserDelete(self, service_id, user_id, status) :
         return self.db.SuperuserDelete(service_id, user_id, status, self.jsonout)
 #=====================================================================================================#
