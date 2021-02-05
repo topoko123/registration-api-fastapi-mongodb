@@ -1,5 +1,5 @@
 # from typing import Dict, Optional, Tuple
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Optional
 from Database.logs_db import Logs
 from app.Service import Service
 from hashlib import sha256
@@ -7,6 +7,7 @@ import Database.Config.conn as connect
 import time
 import datetime
 from app.staterole import UserRole as user_role
+import pymongo
 #=====================================================================================================#
 
 _services      = connect.db.service
@@ -177,38 +178,28 @@ class DB:
         try:
             jsonout = {}
             dict(data)
+            epoch     = time.time()
+            str_epoch = str(epoch)
+            data['unix_time'] = str_epoch
+            date_time = datetime.datetime.utcnow().replace(microsecond=0)+\
+                datetime.timedelta(hours=7)
             
-            if _services.find({
-                'service_name': data['service_name']
-            }).count() > 0 or _services.find({
-                'api_url': data['api_url']
-            }).count() > 0 :
-                msg = {
-                    'message': 'Service name or Endpoint Already use',
-                    'service_name': data['service_name']
-                }
-            else:
-                epoch     = time.time()
-                str_epoch = str(epoch)
-                data['unix_time'] = str_epoch
-                date_time = datetime.datetime.utcnow().replace(microsecond=0)+\
-                    datetime.timedelta(hours=7)
-                
-                data['datetime'] = str(date_time)
-                hash_lib = sha256(str_epoch.encode('utf-8')).hexdigest()
-                data['service_id'] = hash_lib
-    
-                _services.insert_one(data)
-                self.newLogs.ServiceLogs(data)          
+            data['datetime'] = str(date_time)
+            hash_lib = sha256(str_epoch.encode('utf-8')).hexdigest()
+            data['service_id'] = hash_lib
 
-                msg = {
-                    'message': 'Create Success', 
-                    'am'     : data['service_name'],
-                    'wo'     : data['api_url']
-                }
-        except Exception as e:
-            print(e,(type,(e)))
-            msg = {'message': 'Service name or EndPoint Already usee.'}
+            _services.insert_one(data)
+            self.newLogs.ServiceLogs(data)          
+
+            msg = {
+                'message': 'Create Success', 
+                'am'     : data['service_name'],
+                'wo'     : data['api_url']
+            }
+
+        except pymongo.errors.DuplicateKeyError as e:
+            msg = 'Servicename or EndPoint is Already in use.'
+            
         jsonout = {'data': msg}
         return self.newService.ServiceAdd(jsonout)
 #=====================================================================================================#
@@ -241,17 +232,17 @@ class DB:
         except Exception as e:
             print (e, (type, (e)))
             msg = 'Error Login'
+
         jsonout = {'data': msg}
         return self.newService.UserSignin(jsonout)
 #=====================================================================================================#
 
-    def UpdateService(self, data: Dict, jsonout: Dict) -> Dict[str, str] :
+    def UpdateService(self, data: Optional[Dict], jsonout: Dict) -> Dict[str, str] :
         try:
             jsonout = {}
             user_role.MyserviceUpdate(data)
 
-            if (data['service_name'] and data['api_url'] and data['description'] and data['method'] 
-                and data['param_set'] ):
+            if (data['service_name'] and data['api_url'] and data['description'] and data['method']):
                 _services.update_one({
                     'service_id': data['service_id'], 'user_id': data['user_id']
                 },
@@ -274,6 +265,9 @@ class DB:
                 msg = 'Update Failed'
         except AssertionError as e:
             msg = str(e)
+        except pymongo.errors.DuplicateKeyError as e:
+            msg = 'Servicename or EndPoint is Already in use.'
+
         jsonout['alert'] = msg
         return self.newService.UpdateService(jsonout)
 #=====================================================================================================#
@@ -307,6 +301,8 @@ class DB:
                 msg = 'Update Failed'
         except AssertionError as e:
             msg = str(e)
+        except pymongo.errors.DuplicateKeyError as e:
+            msg = 'Servicename or EndPoint is Already in use.'
 
         jsonout['alert'] = msg
         return self.newService.SuperuserUpdate(jsonout)
