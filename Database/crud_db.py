@@ -248,9 +248,7 @@ class DB:
     def UpdateService(self, data: Dict, jsonout: Dict) -> Dict[str, str] :
         try:
             jsonout = {}
-            state = _services.find({'service_id': data['service_id']})
-            assert state.count()       != 0, 'Service not found'
-            assert state[0]['user_id'] == data['user_id'], 'ID not found'
+            user_role.MyserviceUpdate(data)
 
             if (data['service_name'] and data['api_url'] and data['description'] and data['method'] 
                 and data['param_set'] ):
