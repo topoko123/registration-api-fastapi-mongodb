@@ -9,23 +9,18 @@ class Controller :
     db = DB()
     newService = Service()
     jsonout    = {}
-
 #=====================================================================================================#
 
-    def Index(self):
-        return self.newService.Index()
+    def ApiList(self, page, limit, filter, order) :
+        return self.db.ApiList(page, limit, filter, order,self.jsonout)
 #=====================================================================================================#
 
-    def ApiList(self, page, limit) :
-        return self.db.ApiList(page, limit, self.jsonout)
+    def MyApiList(self, page, limit, user_id, filter, order)  :
+        return self.db.MyApiList(page, limit, user_id, filter, order,self.jsonout)
 #=====================================================================================================#
 
-    def MyApiList(self, page, limit, user_id)  :
-        return self.db.MyApiList(page, limit, user_id, self.jsonout)
-#=====================================================================================================#
-
-    def SuperuserList(self, page, limit, user_id, status) :
-        return self.db.SuperuserList(page, limit, user_id, status, self.jsonout)
+    def SuperuserList(self, page, limit, user_id, status, filter, order) :
+        return self.db.SuperuserList(page, limit, user_id, status, filter, order,self.jsonout)
 #=====================================================================================================#
 
     def ServiceAdd(self, data):

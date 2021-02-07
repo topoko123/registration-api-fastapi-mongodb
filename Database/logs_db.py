@@ -1,8 +1,8 @@
 import Database.Config.conn as connect
 from typing import Collection, Dict
 #=====================================================================================================#
-_users      = connect.db.user
-_users_logs = connect.db.userlogs
+_users       = connect.db.user
+_users_logs  = connect.db.userlogs
 _service_logs= connect.db.servicelogs
 _update_logs = connect.db.updatelogs
 _delete_logs = connect.db.deletelogs

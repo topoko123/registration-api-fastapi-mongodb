@@ -6,12 +6,6 @@ from starlette import responses
 
 class Service:
     
-    def Index():
-        try:
-            result = {'result': 'OK'}
-        except:
-            result = {'reuslt': 'Error'}
-        return result
 #=====================================================================================================#
 
     def ApiList(self, jsonout: Dict[str,str], total: Dict[str, int]) -> Dict:

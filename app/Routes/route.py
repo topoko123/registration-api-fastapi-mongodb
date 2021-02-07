@@ -10,26 +10,21 @@ from app.Models.createmodels import createServer, createUser
 router = APIRouter()                
 newController = Controller()
 
-#=====================================================================================================#
-
-@router.get("/")
-async def Index():
-    return newController.Index()
 #=====================================================================================================#     
 
 @router.get("/service/list")
-async def ApiList(page : int, limit: int) :
-    return newController.ApiList(page, limit)
+async def ApiList(page : int, limit: int, filter: str , order: int ) :
+    return newController.ApiList(page, limit, filter, order)
 #=====================================================================================================#
 
 @router.get("/service/myapi/list")
-async def MyApiList(page: int, limit: int, user_id: str) :
-    return newController.MyApiList(page, limit, user_id)
+async def MyApiList(page: int, limit: int, user_id: str, filter: str , order: int ) :
+    return newController.MyApiList(page, limit, user_id, filter, order)
 #=====================================================================================================#
 
 @router.get("/service/superuser/list")
-async def SuperuserList(page: int, limit: int, user_id: str, status: str)  :
-    return newController.SuperuserList(page, limit, user_id, status)
+async def SuperuserList(page: int, limit: int, user_id: str, status: str, filter: str , order: int )  :
+    return newController.SuperuserList(page, limit, user_id, status, filter, order)
 #=====================================================================================================#
 
 @router.post("/service/myapi/add-service")
