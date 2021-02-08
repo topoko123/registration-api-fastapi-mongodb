@@ -11,16 +11,16 @@ class Controller :
     jsonout    = {}
 #=====================================================================================================#
 
-    def ApiList(self, page, limit, filter, order) :
-        return self.db.ApiList(page, limit, filter, order,self.jsonout)
+    def ApiList(self, page, limit, filter) :
+        return self.db.ApiList(page, limit, filter,self.jsonout)
 #=====================================================================================================#
 
-    def MyApiList(self, page, limit, user_id, filter, order)  :
-        return self.db.MyApiList(page, limit, user_id, filter, order,self.jsonout)
+    def MyApiList(self, page, limit, user_id, filter)  :
+        return self.db.MyApiList(page, limit, user_id, filter,self.jsonout)
 #=====================================================================================================#
 
-    def SuperuserList(self, page, limit, user_id, status, filter, order) :
-        return self.db.SuperuserList(page, limit, user_id, status, filter, order,self.jsonout)
+    def SuperuserList(self, page, limit, user_id, status, filter) :
+        return self.db.SuperuserList(page, limit, user_id, status, filter,self.jsonout)
 #=====================================================================================================#
 
     def ServiceAdd(self, data):

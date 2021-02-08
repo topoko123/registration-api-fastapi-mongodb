@@ -13,18 +13,18 @@ newController = Controller()
 #=====================================================================================================#     
 
 @router.get("/service/list")
-async def ApiList(page : int, limit: int, filter: str , order: int ) :
-    return newController.ApiList(page, limit, filter, order)
+async def ApiList(page : int, limit: int, filter: int) :
+    return newController.ApiList(page, limit, filter)
 #=====================================================================================================#
 
 @router.get("/service/myapi/list")
-async def MyApiList(page: int, limit: int, user_id: str, filter: str , order: int ) :
-    return newController.MyApiList(page, limit, user_id, filter, order)
+async def MyApiList(page: int, limit: int, user_id: str, filter: int ) :
+    return newController.MyApiList(page, limit, user_id, filter)
 #=====================================================================================================#
 
 @router.get("/service/superuser/list")
-async def SuperuserList(page: int, limit: int, user_id: str, status: str, filter: str , order: int )  :
-    return newController.SuperuserList(page, limit, user_id, status, filter, order)
+async def SuperuserList(page: int, limit: int, user_id: str, status: str, filter: int )  :
+    return newController.SuperuserList(page, limit, user_id, status, filter)
 #=====================================================================================================#
 
 @router.post("/service/myapi/add-service")

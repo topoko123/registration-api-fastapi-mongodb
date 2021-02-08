@@ -21,12 +21,12 @@ class DB:
     total      = {}
 #=====================================================================================================#
 
-    def ApiList(self, page: int, limit: int, filter: str, order: int, jsonout: Dict) -> Tuple[str, int]: 
+    def ApiList(self, page: int, limit: int, filter: int, jsonout: Dict) -> Tuple[str, int]: 
         try:        
             jsonout = {}
             i=0
             startat = (page - 1) * limit
-            for find in _services.find({'permission': 'public'}).sort([("{}".format(filter), order)]).skip(startat).limit(limit):
+            for find in _services.find({'permission': 'public'}).sort([("datetime", filter)]).skip(startat).limit(limit):
                 start = _users.find({'user_id' : find['user_id']})
                 service_id = find['service_id']
                 if find['param_set'] == [] :
@@ -69,12 +69,12 @@ class DB:
         return self.newService.ApiList(jsonout, self.total)
 #=====================================================================================================#
 
-    def MyApiList(self, page: int, limit: int, user_id: str, filter: str, order: int, jsonout: Dict) -> Tuple[str, int]:
+    def MyApiList(self, page: int, limit: int, user_id: str, filter: int, jsonout: Dict) -> Tuple[str, int]:
         try:
             jsonout = {}
             i=0
             startat = (page - 1) * limit
-            for find in _services.find({'user_id': user_id}).sort([("{}".format(filter), order)]).skip(startat).limit(limit):
+            for find in _services.find({'user_id': user_id}).sort([("datetime", filter)]).skip(startat).limit(limit):
                 start = _users.find({'user_id' : user_id})
                 service_id = find['service_id']
                 if find['param_set'] == [] :
@@ -119,7 +119,7 @@ class DB:
         return self.newService.MyApiList(jsonout, self.total)
 #=====================================================================================================#
 
-    def SuperuserList(self, page: int, limit: int, user_id: str, status: str, filter: str, order: int, jsonout: Dict) -> Tuple[str, int] :
+    def SuperuserList(self, page: int, limit: int, user_id: str, status: str, filter: int, jsonout: Dict) -> Tuple[str, int] :
         try:
             jsonout = {}
             startat = (page - 1) * limit
@@ -127,7 +127,7 @@ class DB:
 
             user_role.SuperuserList(user_id, status)           
 
-            for find in _services.find().sort([("{}".format(filter), order)]).skip(startat).limit(limit):
+            for find in _services.find().sort([("datetime", filter)]).skip(startat).limit(limit):
                 start = _users.find({'user_id': find['user_id']})
                 service_id = find['service_id']
                 if find['param_set'] == [] :
