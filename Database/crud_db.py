@@ -277,8 +277,7 @@ class DB:
             jsonout = {}
             user_role.SuperuserUpdate(data)
             
-            if (data['service_name'] and data['api_url'] and data['description'] and data['method'] 
-                and data['param_set'] ): 
+            if (data['service_name'] and data['api_url'] and data['description'] and data['method']): 
             
                 _services.update_one({
                     'service_id': data['service_id']
