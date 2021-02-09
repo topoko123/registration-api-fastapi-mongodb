@@ -50,7 +50,10 @@ class SuperUserPatchModel(BaseModel):
     user_id         : Optional[str] = None
 #=====================================================================================================#
 
-
+class SuperUserDeleteModel(BaseModel):
+    service_id      : str
+    user_id         : str
+    status          : str
     
 
 

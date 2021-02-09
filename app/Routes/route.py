@@ -2,7 +2,7 @@ from typing import Dict, Tuple
 from fastapi import APIRouter
 from app.Controllers.DbControllers import Controller
 from app.Models.bodymodels import ServiceModel, UserModel, ServiceDeleteModel, ServicePatchModel, \
-    SuperUserPatchModel 
+    SuperUserPatchModel, SuperUserDeleteModel
 from app.Models.createmodels import createServer, createUser 
 
 #=====================================================================================================#
@@ -97,8 +97,13 @@ async def DeleteService(deleteServiceModels: ServiceDeleteModel) :
 #=====================================================================================================#
 
 @router.delete("/service/superuser/delete-service")
-async def SuperuserDelete(service_id: str, user_id: str, status: str) :
-    return newController.SuperuserDelete(service_id, user_id, status)
+async def SuperuserDelete(superuserDelModels: SuperUserDeleteModel) :
+    data = {
+        'service_id': superuserDelModels.service_id,
+        'user_id'   : superuserDelModels.user_id,
+        'status'    : superuserDelModels.status
+    }
+    return newController.SuperuserDelete(data)
 #=====================================================================================================#
 
 

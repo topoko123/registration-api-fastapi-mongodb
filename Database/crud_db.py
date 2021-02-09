@@ -325,11 +325,11 @@ class DB:
         return self.newService.DeleteService(jsonout)
 #=====================================================================================================#
 
-    def SuperuserDelete(self, service_id: str, user_id: str, status: str, jsonout: dict) -> Dict[str, str]:
+    def SuperuserDelete(self, data: Dict, jsonout: Dict) -> Dict[str, str]:
         try:
             jsonout= {}
-            user_role.SuperuserDel(service_id, user_id, status)
-            _services.delete_one({'service_id': service_id})
+            user_role.SuperuserDel(data)
+            _services.delete_one({'service_id': data['service_id']})
             msg = 'Delete Success'
 
         except AssertionError as e:

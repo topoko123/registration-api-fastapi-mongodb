@@ -43,6 +43,6 @@ class Controller :
         return self.db.DeleteService(data, self.jsonout)
 #=====================================================================================================#
 
-    def SuperuserDelete(self, service_id, user_id, status) :
-        return self.db.SuperuserDelete(service_id, user_id, status, self.jsonout)
+    def SuperuserDelete(self, data) :
+        return self.db.SuperuserDelete(data, self.jsonout)
 #=====================================================================================================#
