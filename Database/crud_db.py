@@ -272,7 +272,7 @@ class DB:
         return self.newService.UpdateService(jsonout)
 #=====================================================================================================#
 
-    def SuperuserUpdate(self, data: Dict, jsonout: Dict) -> Dict[str, str] :
+    def SuperuserUpdate(self, data: Optional[Dict], jsonout: Dict) -> Dict[str, str] :
         try:
             jsonout = {}
             user_role.SuperuserUpdate(data)
