@@ -1,3 +1,4 @@
+from pydantic.utils import Obj
 from schematics.models import Model
 from schematics.types import StringType, URLType
 from bson import ObjectId
@@ -20,8 +21,7 @@ class UserModel(Model):
     status = StringType(default='user')
 #=====================================================================================================#
 
-# class DemoTest(Model):
-#     Obj_id = ObjectId
-#     service_id   = StringType(required=True)
-#     service_name = StringType(required=True)
-#     param_set    = StringType(required=True)
+class UserModel(Model):
+    Obj_id = ObjectId()
+    ll     = StringType(required=True)
+    status = StringType(required=True)

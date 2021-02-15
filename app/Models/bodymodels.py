@@ -22,6 +22,13 @@ class UserModel(BaseModel):
     gmail       : str     
 #=====================================================================================================#
 
+class UserLineModel(BaseModel):
+    access_token : str
+    displayname : str
+    
+#=====================================================================================================#
+
+
 class ServiceDeleteModel(BaseModel):
     service_id : str
     user_id    : str
