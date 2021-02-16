@@ -220,15 +220,25 @@ class DB:
                 _users.insert_one(data)
                 self.newLogs.UserLogs(data)
 
-            state = _users.find({'gg.gmail': data['gg']['gmail']})
-            msg = {
-                'message': 'Login Success',
-                'yo'     : state[0]['user_id'],
-                'ff'     : state[0]['gg']['gmail'],
-                'fo'     : state[0]['gg']['google_photo'],
-                'ar'     : state[0]['status']
-            }
-
+            state = _users.find({'user_id': hash_lib})
+            if state[0]['ll'] is None :
+                msg = {
+                    'message': 'Login Success',
+                    'alert'  : 'll_exists',
+                    'yo'     : state[0]['user_id'],
+                    'ff'     : state[0]['gg']['gmail'],
+                    'fo'     : state[0]['gg']['google_photo'],
+                    'ar'     : state[0]['status']
+                }
+        except KeyError as e :
+                msg = {
+                    'message': 'Login Success',
+                    'alert'  : 'll_not_exists',
+                    'yo'     : state[0]['user_id'],
+                    'ff'     : state[0]['gg']['gmail'],
+                    'fo'     : state[0]['gg']['google_photo'],
+                    'ar'     : state[0]['status']
+                }         
         except Exception as e:
             print (e, (type, (e)))
             msg = 'Error Login'
@@ -238,14 +248,46 @@ class DB:
 
 #=====================================================================================================#
 
-    def LineSignin(data: Dict, jsonout: Dict) -> Dict[str, str]:
+    def LineSignin(self, data: Dict, jsonout: Dict) -> Dict[str, str]:
         try:
             jsonout = {}
-            pass
+            if _users.find({
+                'll.ul_id': data['ll']['ul_id']
+            }).count() > 0:
+                pass
+            else:
+                epoch = str(time.time())
+                data['unix_time'] = epoch
+                hash_lib = sha256(epoch.encode('utf-8')).hexdigest()
+                data['user_id'] = hash_lib
+                _users.insert_one(data)
+
+            state = _users.find({'user_id': hash_lib})
+            if state[0]['gg'] is None:
+                pass
+            else:
+                msg = {
+                    'message': 'Login Success',
+                    'alert'  : 'gg_exists',
+                    'yo'     : state[0]['user_id'],
+                    'sb'     : state[0]['ll']['displayname'],
+                    'or'     : state[0]['ll']['picture'],
+                    'ar'     : state[0]['status']
+                }
+        except KeyError as e :
+            msg = {
+                'message': 'Login Success',
+                'alert'  : 'gg_not_exists',
+                'yo'     : state[0]['user_id'],
+                'sb'     : state[0]['ll']['displayname'],
+                'or'     : state[0]['ll']['picture'],
+                'ar'     : state[0]['status']
+            }
         except Exception as e:
             print (e, (type, (e)))
             msg = 'Error Login'
-        return 0
+        jsonout = {'data': msg}
+        return self.newService.LineSignin(jsonout)
 #=====================================================================================================#
 
     def UpdateService(self, data: Optional[Dict], jsonout: Dict) -> Dict[str, str] :
