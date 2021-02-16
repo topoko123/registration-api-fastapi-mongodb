@@ -1,3 +1,4 @@
+from collections import defaultdict
 from pydantic.utils import Obj
 from schematics.models import Model
 from schematics.types import StringType, URLType
@@ -21,7 +22,7 @@ class UserModel(Model):
     status = StringType(default='user')
 #=====================================================================================================#
 
-class UserModel(Model):
+class UserLineModel(Model):
     Obj_id = ObjectId()
     ll     = StringType(required=True)
-    status = StringType(required=True)
+    status = StringType(default='user')

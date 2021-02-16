@@ -2,8 +2,8 @@ from typing import Dict, Tuple
 from fastapi import APIRouter
 from app.Controllers.DbControllers import Controller
 from app.Models.bodymodels import ServiceModel, UserModel, ServiceDeleteModel, ServicePatchModel, \
-    SuperUserPatchModel, SuperUserDeleteModel
-from app.Models.createmodels import createServer, createUser 
+    SuperUserPatchModel, SuperUserDeleteModel, UserLineModel
+from app.Models.createmodels import createServer, createUser, createUserLine 
 
 #=====================================================================================================#
 
@@ -52,6 +52,19 @@ async def UserSignin(userModels: UserModel) :
     data = createUser(id_token, fullname, gmail, google_photo)
     return newController.UserSignin(data)
 #=====================================================================================================#
+
+@router.post("/linelogin")
+async def LineSingin(userLineModels: UserLineModel):
+    access_token = userLineModels.access_token
+    displayname = userLineModels.displayname
+    ul_id       = userLineModels.ul_id
+    picture     = userLineModels.picture
+    _id_li_tk   = userLineModels._id_li_tk
+
+    data = createUserLine(access_token, displayname, ul_id, picture, _id_li_tk)
+    return newController.LineSignin(data)
+#=====================================================================================================#
+
 
 @router.patch("/service/myapi/update-service")
 async def UpdateService(updateServiceModels: ServicePatchModel) :

@@ -30,6 +30,10 @@ class Controller :
     def UserSignin(self, data) :
         return self.db.UserSignin(data, self.jsonout)
 #=====================================================================================================#
+
+    def LineSignin(self, data):
+        return self.db.LineSignin(data, self.jsonout)
+#=====================================================================================================#
     
     def UpdateService(self, data) :
         return self.db.UpdateService(data, self.jsonout)

@@ -235,6 +235,17 @@ class DB:
 
         jsonout = {'data': msg}
         return self.newService.UserSignin(jsonout)
+
+#=====================================================================================================#
+
+    def LineSignin(data: Dict, jsonout: Dict) -> Dict[str, str]:
+        try:
+            jsonout = {}
+            pass
+        except Exception as e:
+            print (e, (type, (e)))
+            msg = 'Error Login'
+        return 0
 #=====================================================================================================#
 
     def UpdateService(self, data: Optional[Dict], jsonout: Dict) -> Dict[str, str] :

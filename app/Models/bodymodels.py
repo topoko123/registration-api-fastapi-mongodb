@@ -23,9 +23,11 @@ class UserModel(BaseModel):
 #=====================================================================================================#
 
 class UserLineModel(BaseModel):
-    access_token : str
+    access_token: str
     displayname : str
-    
+    ul_id       : str
+    picture     : str
+    _id_li_tk   : str
 #=====================================================================================================#
 
 
