@@ -27,7 +27,7 @@ class UserLineModel(BaseModel):
     displayname : str
     ul_id       : str
     picture     : str
-    _id_li_tk   : str
+    id_li_tk    : str
 #=====================================================================================================#
 
 

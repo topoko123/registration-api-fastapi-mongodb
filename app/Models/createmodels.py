@@ -25,14 +25,14 @@ def createUser(id_token, fullname, gmail, google_photo):
     return dict(newUser)
 #=====================================================================================================#
 
-def createUserLine(access_token, displayname, ul_id, picture, _id_li_tk):
+def createUserLine(access_token, displayname, ul_id, picture, id_li_tk):
     newUserLine.Obj_id = ObjectId()
     newUserLine.ll = {
         'access_token': access_token,
         'displayname' : displayname,
         'ul_id'       : ul_id,
         'picture'     : picture,
-        '_id_li_tk'   : _id_li_tk
+        'id_li_tk'   : id_li_tk
     }
     return dict(newUserLine)
     

@@ -215,33 +215,37 @@ class DB:
                 epoch = time.time()
                 data['unix_time'] = str(epoch)
                 hash_lib = sha256(str(epoch).encode('utf-8')).hexdigest()
-                data['user_id'] = hash_lib
 
+                date_time = datetime.datetime.utcnow().replace(microsecond=0)+\
+                datetime.timedelta(hours=7)
+                data['datetime'] = str(date_time)
+
+                data['user_id'] = hash_lib
+            
                 _users.insert_one(data)
                 self.newLogs.UserLogs(data)
 
-            state = _users.find({'user_id': hash_lib})
-            if state[0]['ll'] is None :
-                msg = {
-                    'message': 'Login Success',
-                    'alert'  : 'll_exists',
-                    'yo'     : state[0]['user_id'],
-                    'ff'     : state[0]['gg']['gmail'],
-                    'fo'     : state[0]['gg']['google_photo'],
-                    'ar'     : state[0]['status']
-                }
-        except KeyError as e :
-                msg = {
-                    'message': 'Login Success',
-                    'alert'  : 'll_not_exists',
-                    'yo'     : state[0]['user_id'],
-                    'ff'     : state[0]['gg']['gmail'],
-                    'fo'     : state[0]['gg']['google_photo'],
-                    'ar'     : state[0]['status']
-                }         
-        except Exception as e:
-            print (e, (type, (e)))
-            msg = 'Error Login'
+            state = _users.find({'gg.gmail': data['gg']['gmail']})
+            if state[0]['ll'] is None:
+                pass
+
+            msg = {
+                'message': 'Login Success',
+                'alert'  : 'll_exists',
+                'yo'     : state[0]['user_id'],
+                'ff'     : state[0]['gg']['gmail'],
+                'fo'     : state[0]['gg']['google_photo'],
+                'ar'     : state[0]['status']
+            }
+        except KeyError as e:
+            msg = {
+                'message': 'Login Success',
+                'alert'  : 'll_not_exists',
+                'yo'     : state[0]['user_id'],
+                'ff'     : state[0]['gg']['gmail'],
+                'fo'     : state[0]['gg']['google_photo'],
+                'ar'     : state[0]['status']
+            }
 
         jsonout = {'data': msg}
         return self.newService.UserSignin(jsonout)
@@ -256,25 +260,32 @@ class DB:
             }).count() > 0:
                 pass
             else:
-                epoch = str(time.time())
-                data['unix_time'] = epoch
-                hash_lib = sha256(epoch.encode('utf-8')).hexdigest()
-                data['user_id'] = hash_lib
-                _users.insert_one(data)
+                epoch = time.time()
+                data['unix_time'] = str(epoch)
+                hash_lib = sha256(str(epoch).encode('utf-8')).hexdigest()
+                
+                date_time = datetime.datetime.utcnow().replace(microsecond=0)+\
+                datetime.timedelta(hours=7)
+                data['datetime'] = str(date_time)
 
-            state = _users.find({'user_id': hash_lib})
+                data['user_id'] = hash_lib
+            
+                _users.insert_one(data)
+                self.newLogs.UserLogs(data)
+
+            state = _users.find({'ll.ul_id': data['ll']['ul_id']})
             if state[0]['gg'] is None:
                 pass
-            else:
-                msg = {
-                    'message': 'Login Success',
-                    'alert'  : 'gg_exists',
-                    'yo'     : state[0]['user_id'],
-                    'sb'     : state[0]['ll']['displayname'],
-                    'or'     : state[0]['ll']['picture'],
-                    'ar'     : state[0]['status']
-                }
-        except KeyError as e :
+
+            msg = {
+                'message': 'Login Success',
+                'alert'  : 'gg_exists',
+                'yo'     : state[0]['user_id'],
+                'sb'     : state[0]['ll']['displayname'],
+                'or'     : state[0]['ll']['picture'],
+                'ar'     : state[0]['status']
+            }
+        except KeyError as e:
             msg = {
                 'message': 'Login Success',
                 'alert'  : 'gg_not_exists',
@@ -283,9 +294,7 @@ class DB:
                 'or'     : state[0]['ll']['picture'],
                 'ar'     : state[0]['status']
             }
-        except Exception as e:
-            print (e, (type, (e)))
-            msg = 'Error Login'
+
         jsonout = {'data': msg}
         return self.newService.LineSignin(jsonout)
 #=====================================================================================================#

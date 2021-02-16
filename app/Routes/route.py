@@ -59,9 +59,9 @@ async def LineSingin(userLineModels: UserLineModel):
     displayname = userLineModels.displayname
     ul_id       = userLineModels.ul_id
     picture     = userLineModels.picture
-    _id_li_tk   = userLineModels._id_li_tk
+    id_li_tk    = userLineModels.id_li_tk
 
-    data = createUserLine(access_token, displayname, ul_id, picture, _id_li_tk)
+    data = createUserLine(access_token, displayname, ul_id, picture, id_li_tk)
     return newController.LineSignin(data)
 #=====================================================================================================#
 
