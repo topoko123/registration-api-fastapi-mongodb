@@ -1,8 +1,12 @@
 from typing import Dict, Tuple
+
 from fastapi import APIRouter
+
 from app.Controllers.DbControllers import Controller
+
 from app.Models.bodymodels import ServiceModel, UserModel, ServiceDeleteModel, ServicePatchModel, \
-    SuperUserPatchModel, SuperUserDeleteModel, UserLineModel
+    SuperUserPatchModel, SuperUserDeleteModel, UserLineModel, G_UserPatchModel, L_UserPatchModel
+
 from app.Models.createmodels import createServer, createUser, createUserLine 
 
 #=====================================================================================================#
@@ -98,6 +102,33 @@ async def SuperuserUpdate(superuserUpdateModels: SuperUserPatchModel) :
     }
     return newController.SuperuserUpdate(data)
 #=====================================================================================================#
+
+@router.patch("/add-acc/gg-line")
+async def GG_add_Line(l_UserPatchModels: L_UserPatchModel):
+
+    data = {
+        'user_id' : l_UserPatchModels.user_id,
+        'access_token': l_UserPatchModels.access_token,
+        'displayname': l_UserPatchModels.displayname,
+        'ul_id'      : l_UserPatchModels.ul_id,
+        'picture'    : l_UserPatchModels.picture,
+        'id_li_tk'   : l_UserPatchModels.id_li_tk
+    }
+    return newController.GG_add_Line(data)
+#=====================================================================================================#
+
+@router.patch("/add-acc/ll-gg")
+async def LL_add_gg(g_UserPatchModels: G_UserPatchModel):
+    data = {
+        'user_id' : g_UserPatchModels.user_id,
+        'id_token': g_UserPatchModels.id_token,
+        'fullname': g_UserPatchModels.fullname,
+        'gmail'   : g_UserPatchModels.gmail,
+        'google_photo': g_UserPatchModels.google_photo
+    }
+    return newController.LL_add_gg(data)
+#=====================================================================================================#
+
 
 @router.delete("/service/myapi/delete-service")
 async def DeleteService(deleteServiceModels: ServiceDeleteModel) :

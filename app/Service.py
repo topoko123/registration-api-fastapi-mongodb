@@ -38,6 +38,13 @@ class Service:
     def SuperuserUpdate(self, jsonout: Dict[str,str]) -> Dict:
         return jsonout
 #=====================================================================================================#
+    def GG_add_Line(self, jsonout: Dict[str, str]) -> Dict:
+        return jsonout
+#=====================================================================================================#
+
+    def LL_add_gg(self, jsonout: Dict[str, str]) -> Dict:
+        return jsonout
+#=====================================================================================================#
 
     def DeleteService(self, jsonout: Dict[str,str]) -> Dict:
         return jsonout

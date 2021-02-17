@@ -369,6 +369,54 @@ class DB:
         return self.newService.SuperuserUpdate(jsonout)
 #=====================================================================================================#
 
+    def GG_add_Line(self, data: Optional[Dict], jsonout: Dict) -> Dict[str, str]:
+        try:
+            jsonout = {}
+            if (data['access_token'] and data['displayname'] and data['ul_id'] and data['id_li_tk']):
+
+                _users.update_one({
+                    'user_id': data['user_id']
+                },
+                {
+                    '$set': {
+                        'll.access_token': data['access_token'],
+                        'll.displayname' : data['displayname'],
+                        'll.ul_id' : data['ul_id'],
+                        'll.picture' : data['picture'],
+                        'll.id_li_tk' : data['id_li_tk']
+                    }
+                })
+                msg = 'll_exists'
+        except Exception as e:
+            print (e ,(type, (e)))
+        jsonout['alert'] = msg
+        return self.newService.GG_add_Line(jsonout)
+#=====================================================================================================#
+
+    def LL_add_gg(self, data: Optional[Dict], jsonout: Dict) -> Dict[str, str]:
+        try:
+            jsonout = {}
+            if (data['id_token'] and data['fullname'] and data['gmail']):
+
+                _users.update_one({
+                    'user_id': data['user_id'],
+                },
+                {
+                    '$set': {
+                        'gg.id_token' : data['id_token'],
+                        'gg.fullname' : data['fullname'],
+                        'gg.gmail'    : data['gmail'],
+                        'gg.google_photo' : data['google_photo']
+                    }
+                })
+                msg = 'gg_exists'
+        except Exception as e:
+            print (e, (type,(e)))
+        jsonout['alert'] = msg
+        return self.newService.LL_add_gg(jsonout)
+#=====================================================================================================#
+
+
     def DeleteService(self, data: Dict, jsonout: Dict) -> Dict[str, str] :
         try:
             user_role.MyserviceDel(data)

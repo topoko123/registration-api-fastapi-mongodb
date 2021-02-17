@@ -59,6 +59,25 @@ class SuperUserPatchModel(BaseModel):
     user_id         : Optional[str] = None
 #=====================================================================================================#
 
+class G_UserPatchModel(BaseModel):
+    user_id     : str
+    id_token    : str
+    fullname    : str
+    google_photo: str
+    gmail       : str
+#=====================================================================================================#
+
+class L_UserPatchModel(BaseModel):
+    user_id     : str
+    access_token: str
+    displayname : str
+    ul_id       : str
+    picture     : str
+    id_li_tk    : str
+#=====================================================================================================#
+
+
+
 class SuperUserDeleteModel(BaseModel):
     service_id      : str
     user_id         : str

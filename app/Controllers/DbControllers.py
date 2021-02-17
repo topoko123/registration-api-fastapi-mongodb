@@ -42,6 +42,13 @@ class Controller :
     def SuperuserUpdate(self, data) :
         return self.db.SuperuserUpdate(data, self.jsonout)
 #=====================================================================================================#
+    def GG_add_Line(self, data):
+        return self.db.GG_add_Line(data, self.jsonout)
+#=====================================================================================================#
+    def LL_add_gg(self, data):
+        return self.db.LL_add_gg(data, self.jsonout)
+#=====================================================================================================#
+
 
     def DeleteService(self, data) :
         return self.db.DeleteService(data, self.jsonout)
