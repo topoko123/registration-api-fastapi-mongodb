@@ -77,7 +77,6 @@ class L_UserPatchModel(BaseModel):
 #=====================================================================================================#
 
 
-
 class SuperUserDeleteModel(BaseModel):
     service_id      : str
     user_id         : str

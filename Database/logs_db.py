@@ -23,6 +23,9 @@ class Logs :
         return _users_logs.insert_one(data_logs)
 #=====================================================================================================#
 
+#=====================================================================================================#
+
+
     def ServiceLogs(self, data: Dict) -> Collection[Dict] :                                #insert service_log collections
         try:
             data_logs = {}

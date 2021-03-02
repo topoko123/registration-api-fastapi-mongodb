@@ -103,7 +103,7 @@ async def SuperuserUpdate(superuserUpdateModels: SuperUserPatchModel) :
     return newController.SuperuserUpdate(data)
 #=====================================================================================================#
 
-@router.patch("/add-acc/gg-line")
+@router.patch("/add-acc/gg-ll")
 async def GG_add_Line(l_UserPatchModels: L_UserPatchModel):
 
     data = {
