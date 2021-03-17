@@ -69,12 +69,110 @@ class DB:
         return self.newService.ApiList(jsonout, self.total)
 #=====================================================================================================#
 
-    def MyApiList(self, page: int, limit: int, user_id: str, filter: int, jsonout: Dict) -> Tuple[str, int]:
+    def MyApiList_Public(self, page: int, limit: int, user_id: str, filter: int, jsonout: Dict) -> Tuple[str, int]:
         try:
             jsonout = {}
             i=0
             startat = (page - 1) * limit
-            for find in _services.find({'user_id': user_id}).sort([("datetime", filter)]).skip(startat).limit(limit):
+            for find in _services.find({'user_id': user_id, 'permission': 'public'}).sort([("datetime", filter)]).skip(startat).limit(limit):
+                start = _users.find({'user_id' : user_id})
+                service_id = find['service_id']
+                if find['param_set'] == [] :
+                    dict = {
+                        'ao'  : service_id,
+                        'am'  : find['service_name'],
+                        'wo'  : find['api_url'],
+                        'od'  : find['permission'],
+                        'sy'  : find['description'],
+                        'ny'  : find['method'],
+                        'oa'  : find['param_set'],
+                        'fh'  : start[i]['gg']['gmail'],
+                        'fy'  : find['datetime']
+                    }
+                    jsonout[service_id] = dict
+                    
+                else: 
+                    for state in find['param_set']:
+                        state['om'] = state.pop('param_name')
+                        state['oy'] = state.pop('param_type')
+                        state['sv'] = state.pop('desc')
+
+                    dict = {
+                        'ao'  : service_id,
+                        'am'  : find['service_name'],
+                        'wo'  : find['api_url'],
+                        'od'  : find['permission'],
+                        'sy'  : find['description'],
+                        'ny'  : find['method'],
+                        'oa'  : find['param_set'],
+                        'fh'  : start[i]['gg']['gmail'],
+                        'fy'  : find['datetime']
+                    }
+                    jsonout[service_id] = dict
+                
+                    
+                
+            self.total['total'] = _services.count({'user_id': user_id, 'permission': 'public'})
+        except Exception as e:
+            print(e, (type, (e)))
+
+        return self.newService.MyApiList(jsonout, self.total)
+#=====================================================================================================#
+    def MyApiList_private(self, page: int, limit: int, user_id: str, filter: int, jsonout: Dict) -> Tuple[str, int]:
+        try:
+            jsonout = {}
+            i=0
+            startat = (page - 1) * limit
+            for find in _services.find({'user_id': user_id, 'permission': 'private'}).sort([("datetime", filter)]).skip(startat).limit(limit):
+                start = _users.find({'user_id' : user_id})
+                service_id = find['service_id']
+                if find['param_set'] == [] :
+                    dict = {
+                        'ao'  : service_id,
+                        'am'  : find['service_name'],
+                        'wo'  : find['api_url'],
+                        'od'  : find['permission'],
+                        'sy'  : find['description'],
+                        'ny'  : find['method'],
+                        'oa'  : find['param_set'],
+                        'fh'  : start[i]['gg']['gmail'],
+                        'fy'  : find['datetime']
+                    }
+                    jsonout[service_id] = dict
+                    
+                else: 
+                    for state in find['param_set']:
+                        state['om'] = state.pop('param_name')
+                        state['oy'] = state.pop('param_type')
+                        state['sv'] = state.pop('desc')
+
+                    dict = {
+                        'ao'  : service_id,
+                        'am'  : find['service_name'],
+                        'wo'  : find['api_url'],
+                        'od'  : find['permission'],
+                        'sy'  : find['description'],
+                        'ny'  : find['method'],
+                        'oa'  : find['param_set'],
+                        'fh'  : start[i]['gg']['gmail'],
+                        'fy'  : find['datetime']
+                    }
+                    jsonout[service_id] = dict
+                
+                    
+                
+            self.total['total'] = _services.count({'user_id': user_id, 'permission': 'private'})
+        except Exception as e:
+            print(e, (type, (e)))
+
+        return self.newService.MyApiList(jsonout, self.total)
+#=====================================================================================================#
+    def MyApiList_All(self, page: int, limit: int, user_id: str, filter: int, jsonout: Dict) -> Tuple[str, int]:
+        try:
+            jsonout = {}
+            i=0
+            startat = (page - 1) * limit
+            for find in _services.find().sort([("datetime", filter)]).skip(startat).limit(limit):
                 start = _users.find({'user_id' : user_id})
                 service_id = find['service_id']
                 if find['param_set'] == [] :
@@ -119,7 +217,115 @@ class DB:
         return self.newService.MyApiList(jsonout, self.total)
 #=====================================================================================================#
 
-    def SuperuserList(self, page: int, limit: int, user_id: str, status: str, filter: int, jsonout: Dict) -> Tuple[str, int] :
+    def SuperuserList_Public(self, page: int, limit: int, user_id: str, status: str, filter: int, jsonout: Dict) -> Tuple[str, int] :
+        try:
+            jsonout = {}
+            startat = (page - 1) * limit
+            i=0
+
+            user_role.SuperuserList(user_id, status)           
+
+            for find in _services.find({'permission': 'public'}).sort([("datetime", filter)]).skip(startat).limit(limit):
+                start = _users.find({'user_id': find['user_id']})
+                service_id = find['service_id']
+                if find['param_set'] == [] :
+
+                    dict = {
+                        'ao'  : service_id,
+                        'am'  : find['service_name'],
+                        'wo'  : find['api_url'],
+                        'od'  : find['permission'],
+                        'sy'  : find['description'],
+                        'ny'  : find['method'],
+                        'oa'  : find['param_set'],
+                        'fh'  : start[i]['gg']['gmail'],
+                        'fy'  : find['datetime']
+                    }
+                    jsonout[service_id] = dict
+                    
+                else: 
+                    for state in find['param_set']:
+                        state['om'] = state.pop('param_name')
+                        state['oy'] = state.pop('param_type')
+                        state['sv'] = state.pop('desc')
+
+                    dict = {
+                        'ao'  : service_id,
+                        'am'  : find['service_name'],
+                        'wo'  : find['api_url'],
+                        'od'  : find['permission'],
+                        'sy'  : find['description'],
+                        'ny'  : find['method'],
+                        'oa'  : find['param_set'],
+                        'fh'  : start[i]['gg']['gmail'],
+                        'fy'  : find['datetime']
+                    }
+                    jsonout[service_id] = dict 
+                
+            self.total['total'] = _services.count({'permission': 'public'})
+
+        except AssertionError as e:
+            print (e)
+            jsonout['alert'] = str(e)
+            return jsonout
+    
+        return self.newService.SuperuserList(jsonout, self.total)
+#=====================================================================================================#
+    def SuperuserList_Private(self, page: int, limit: int, user_id: str, status: str, filter: int, jsonout: Dict) -> Tuple[str, int] :
+        try:
+            jsonout = {}
+            startat = (page - 1) * limit
+            i=0
+
+            user_role.SuperuserList(user_id, status)           
+
+            for find in _services.find({'permission': 'private'}).sort([("datetime", filter)]).skip(startat).limit(limit):
+                start = _users.find({'user_id': find['user_id']})
+                service_id = find['service_id']
+                if find['param_set'] == [] :
+
+                    dict = {
+                        'ao'  : service_id,
+                        'am'  : find['service_name'],
+                        'wo'  : find['api_url'],
+                        'od'  : find['permission'],
+                        'sy'  : find['description'],
+                        'ny'  : find['method'],
+                        'oa'  : find['param_set'],
+                        'fh'  : start[i]['gg']['gmail'],
+                        'fy'  : find['datetime']
+                    }
+                    jsonout[service_id] = dict
+                    
+                else: 
+                    for state in find['param_set']:
+                        state['om'] = state.pop('param_name')
+                        state['oy'] = state.pop('param_type')
+                        state['sv'] = state.pop('desc')
+
+                    dict = {
+                        'ao'  : service_id,
+                        'am'  : find['service_name'],
+                        'wo'  : find['api_url'],
+                        'od'  : find['permission'],
+                        'sy'  : find['description'],
+                        'ny'  : find['method'],
+                        'oa'  : find['param_set'],
+                        'fh'  : start[i]['gg']['gmail'],
+                        'fy'  : find['datetime']
+                    }
+                    jsonout[service_id] = dict 
+                
+            self.total['total'] = _services.count({'permission': 'private'})
+
+        except AssertionError as e:
+            print (e)
+            jsonout['alert'] = str(e)
+            return jsonout
+    
+        return self.newService.SuperuserList(jsonout, self.total)
+#=====================================================================================================#
+    def SuperuserList_All(self, page: int, limit: int, user_id: str, status: str, filter: int, jsonout: Dict) -> Tuple[str, int] :
         try:
             jsonout = {}
             startat = (page - 1) * limit

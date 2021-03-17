@@ -15,12 +15,22 @@ class Controller :
         return self.db.ApiList(page, limit, filter,self.jsonout)
 #=====================================================================================================#
 
-    def MyApiList(self, page, limit, user_id, filter)  :
-        return self.db.MyApiList(page, limit, user_id, filter,self.jsonout)
+    def MyApiList(self, page, limit, user_id, filter, public, private) :
+        if public and private == 1:
+            return self.db.MyApiList_All(page, limit, user_id, filter, self.jsonout)
+        elif public == 1:
+            return self.db.MyApiList_Public(page, limit, user_id, filter, self.jsonout)
+        else:
+            return self.db.MyApiList_private(page, limit, user_id, filter, self.jsonout)
 #=====================================================================================================#
 
-    def SuperuserList(self, page, limit, user_id, status, filter) :
-        return self.db.SuperuserList(page, limit, user_id, status, filter,self.jsonout)
+    def SuperuserList(self, page, limit, user_id, status, filter, public, private) :
+        if public and private == 1:
+            return self.db.SuperuserList_All(page, limit, user_id, status, filter, self.jsonout)
+        elif public == 1:
+            return self.db.SuperuserList_Public(page, limit, user_id, status, filter, self.jsonout)
+        else:
+            return self.db.SuperuserList_Private(page, limit, user_id, status, filter, self.jsonout)
 #=====================================================================================================#
 
     def ServiceAdd(self, data):
