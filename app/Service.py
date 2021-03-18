@@ -53,3 +53,5 @@ class Service:
     def SuperuserDelete(self, jsonout: Dict[str,str]) -> Dict:
         return jsonout
 #=====================================================================================================#
+    def MyApiList_null():
+        return 0
