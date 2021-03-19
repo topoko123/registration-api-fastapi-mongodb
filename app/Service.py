@@ -53,5 +53,6 @@ class Service:
     def SuperuserDelete(self, jsonout: Dict[str,str]) -> Dict:
         return jsonout
 #=====================================================================================================#
-    def MyApiList_null():
-        return 0
+    def MyApiList_null(self, jsonout):
+        jsonout = 'not found'
+        return (jsonout)
