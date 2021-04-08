@@ -2,7 +2,7 @@ from pymongo import MongoClient
 #=====================================================================================================#
 
 #url mongodb
-mongodb_url = 'mongodb+srv://thanwa12:147258@apidb.a7x7g.mongodb.net/api_db?retryWrites=true&w=majority'
+# mongodb_url = '<YOUR-CLUSTER-ID>' ---->นำ clusterID จาก MongoDB Atlas มาใส่
 #start port
 port=8000
 #=====================================================================================================#
