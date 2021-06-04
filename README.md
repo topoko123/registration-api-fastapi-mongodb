@@ -11,9 +11,9 @@
  
  workflow: Frontend -> Controller -> Backend( database )
  โดยโปรเจ็คชิ้นนี้เป็น 1 ในส่วของโปรเจ็คทั้งหมดของ Abdul registration API โดยจะมีทั้งหมด 3 โปรเจ็คและเชื่อมเข้าหากันด้วย API  มีดังนี้
-Font End: https://github.com/javakung/ABDUL-Registerations-API
-Controller: https://github.com/taefreeze/PythonApiController
-Back End: https://github.com/topoko123/registration-api-fastapi-mongodb/
+- Font End: https://github.com/javakung/ABDUL-Registerations-API
+- Controller: https://github.com/taefreeze/PythonApiController
+- Back End: https://github.com/topoko123/registration-api-fastapi-mongodb/
 
 ## เหตุผลที่ต้องทำแยกออกเป็น 3 ชุดแล้วเชื่อมหากัน
 - มันจะช่วยให้เราเข้าใจการทำงานเป็นทีม และเข้าใจว่า Font End ควรทำอะไร Controller ควรทำอะไร Backend ควรทำอะไร
